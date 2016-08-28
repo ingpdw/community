@@ -21,29 +21,49 @@ import Tmpl from 'js-template-string';
 class Comment{
 	constructor( node, options ){
 		this.$node = node;
+
 		this._id = this.$node.attr( 'id' );
+
+		Config.board = ( options.board )? options.board: Config.board;
+
+		//comment Reply
 		this.commentReply = new CommentReply( this.$node );
+
+		//like button
 		this.commentVote = new CommentVote( this.$node );
+
+		//remove Comment Article
 		this.commentRemove = new CommentRemove( this.$node );
+
+		//comment wrap UI
 		this.commentListWrap = new CommentListWrap( this.$node );
+
+		//reload comment
 		this.commentReload = new CommentReload( this.$node, () => {
 			this.commentListWrap.empty();
 			this.reloadComment();
 		});
+
+		//write comment
 		this.commentWrite = new CommentWrite( this.$node, ()=> {
 			this.commentListWrap.empty();
 			this.reloadComment();
 			this.commentWrite.clear();
 		});
+
+		//comment count UI
 		this.commentHeader = new CommentHeader( this.$node );
+
+		//comment report UI
 		this.commentReport = new CommentReport( this.$node, jQuery( 'body' ) );
+
+		//more button
 		this.commentMore = new CommentMore( this.$node, ( data ) => {
 			this.commentListWrap.appendList( Template.commentList( data ) );
 			this.myLikeComment( data.likeCommentIds );
 		});
 
-		Config.board = ( options.board )? options.board: Config.board;
-
+		//loading spinner
 		this.loading = new Loading( this.$node );
 		this.loading.setUI();
   }
@@ -84,6 +104,7 @@ class Comment{
 
   get(){
 		this.loading.show();
+
 		let _param = Util.getParams();
 
 		let articleId = _param.articleId;

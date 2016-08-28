@@ -17,7 +17,7 @@ class CommentRemove{
 
 	addEvent(){
 		jQuery( 'body' ).on( 'click', `#${this._id} .ncCommentCommonWrap .btn-delete`, ( evt ) => {
-			Util.confirm( '정말로 삭제하시겠습니까?', () => {
+			Util.confirm( Config.L10N.alert_delete_article, () => {
 				let _$this = jQuery( evt.currentTarget );
 				let $removeNode = _$this.parent().parent();
 				let isReplay = $removeNode.hasClass( 'comment-article-reply' );

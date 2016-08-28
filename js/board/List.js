@@ -95,7 +95,7 @@ class List{
 
 			//empty data
 			if( data.articleList.length == 0 ){
-				this.$node.append( Template.empty( this.listId, '데이터가 없습니다.' ) );
+				this.$node.append( Template.empty( this.listId, Config.L10N.list_none_article ) );
 				return;
 			}else{
 				let page = this.pageNavigation.setUI( data.pageNavigation );

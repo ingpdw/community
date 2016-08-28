@@ -14,6 +14,8 @@ class CommentMore{
 		this.$node = $node;
 		this._id = this.$node.attr( 'id' );
 		this.callback = callback;
+		//this.callback = new Promise( (resolve, reject ) => {});
+
 		this.infiniteScroll = new InfiniteScroll( ( dir ) => {
 			if( dir == 'down' ) this.get();
 		});

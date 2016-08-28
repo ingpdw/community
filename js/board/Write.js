@@ -48,15 +48,9 @@ class Write{
 				_$contents = jQuery( '<div>' );
 				_$contents.append( _contents );
 
-				console.log( 	_$contents.clone().html() );
-
 				_$contents.find( '.fe-image-inner .fe-image' ).after( this.removeButtonUI() );
 
-				console.log( 	_$contents.clone().parent().html() );
-
 				_$contents.find( '.fe-video .fe-video-inner iframe' ).after( this.removeButtonUI() );
-
-				console.log( 	_$contents.clone().html() );
 
 				_$contents = _$contents.clone().html();
 				this.editor.insert( _$contents );
@@ -90,12 +84,12 @@ class Write{
 		let _post = '';
 
 		if( !data.title ){
-			alert( '제목을 입력해 주세요' );
+			alert( Config.L10N.alert_empty_title );
 			return;
 		}
 
 		if( !data.contents ){
-			alert( '내용을 입력해 주세요' );
+			alert( Config.L10N.alert_empty_contents );
 			return;
 		}
 
@@ -119,11 +113,16 @@ class Write{
 
 	getThumbnail() {
 		let contents = this.editor.getSubmitContents();
-		let $contents = jQuery( contents );
+		let _$contents = jQuery( '<div>' );
+		_$contents.append( contents );
 
-		let _image = $contents.find( `.fe-image-inner img:eq( 0 )` ).attr( 'src' ) || ``;
-		let _video = $contents.find( `.fe-video iframe:eq( 0 )` ).attr( 'src' ) || ``;
-		_video = _video.substr( _video.lastIndexOf( '/' ) + 1 );
+		let _image = _$contents.find( `.fe-image-inner img:eq( 0 )` ).attr( 'src' ) || ``;
+		let _video = _$contents.find( `.fe-video:eq( 0 )` ).attr( 'data-contents-json' ) || ``;
+
+		if( _video ){
+			_video = JSON.parse( _video ).video_id;
+			_video = `http://img.youtube.com/vi/${_video}/0.jpg`
+		}
 
 		return _image || _video || ``;
 	}
@@ -134,6 +133,7 @@ class Write{
 			let contents = this.editor.getSubmitContents();
 			let data = {
 				articleId: this.articleId,
+				token_id: this.editor.getToken(),
 				title: jQuery( '#title' ).val(),
 				contents: contents,
 				thumbnail: this.getThumbnail()
@@ -153,18 +153,16 @@ class Write{
 	template(){
 		return `<div class="board-write">
 		<form id="boardWriteForm" name="boardWriteForm" action="/board/${Config.board}/article" method="post" autocomplete="off" onSubmit="return false;">
-
 			<input type="hidden" name="articleId" id="articleId" value="${this.articleId}" />
-
 			<div class="co-btn-wrap">
-				<div class="left"><button id="boardWriteCancel" type="button" class="co-btn co-btn-write-cancel">취소</button></div>
-				<div class="right"><button id="boardWriteSubmit" type="button" class="co-btn co-btn-write-submit">완료</button></div>
+				<div class="left"><button id="boardWriteCancel" type="button" class="co-btn co-btn-write-cancel">${Config.L10N.btn_cancel}</button></div>
+				<div class="right"><button id="boardWriteSubmit" type="button" class="co-btn co-btn-write-submit">${Config.L10N.btn_confirm}</button></div>
 			</div>
 
 			<div class="board-write-category"></div>
 
 			<div class="board-write-title">
-				<input type="text" name="title" id="title" placeholder="제목" />
+				<input type="text" name="title" id="title" placeholder="${Config.L10N.title}" />
 			</div>
 
 			<div id="froala-editor"></div>

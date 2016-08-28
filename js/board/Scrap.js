@@ -15,7 +15,7 @@ class Scrap{
   }
 
 	template(){
-		return `<li class="more-items"><button class="co-btn co-btn-bookmark">북마크</button></li>`;
+		return `<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmar}</button></li>`;
 	}
 
 	addEvent(){
@@ -34,9 +34,9 @@ class Scrap{
 			});
 		_post.then( ( data ) => {
 			if( data != -1 ){
-				alert( '스크랩되었습니다.' );
+				alert( Config.L10N.bookmark_have_done );
 			}else{
-				alert( '이미 스크랩 되었습니다.' );
+				alert( Config.L10N.bookmark_already_have_done );
 				//Config.apiError( data );
 			}
 

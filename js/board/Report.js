@@ -49,9 +49,9 @@ class Report {
 				this.$node.addClass( 'is-active' );
 				this.$modal.addClass( 'is-active' );
 			}else if( data == -1 ){
-				alert( '이미 신고하신 글입니다.' );
+				alert( Config.L10N.report_already_have_done );
 			}else{
-				alert( '오늘 하루 신고 횟수를 초과했습니다.' );
+				alert( Config.L10N.report_info );
 			}
 		});
 	}
@@ -102,7 +102,7 @@ class Report {
 				reason: value
 			}, ( data )=>{
 				if( data == -1 ){
-					alert( '이미 신고하신 글입니다.' );
+					alert( Config.L10N.report_already_have_done );
 				}else{
 					alert( Config.L10N.report_have_done );
 				}

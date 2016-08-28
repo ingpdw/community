@@ -153,7 +153,7 @@ module.exports = {
 	commentWrite: ( content ) => {
     return `<div class="comment-form">
 				<div class="comment-form-textarea">
-					<textarea class="content ${content}" name="content" placeholder="댓글은 300자까지 작성 가능합니다." style="height:40px;"></textarea>
+					<textarea class="content ${content}" name="content" placeholder="${Config.L10N.comment_placeholder_login}" style="height:40px;"></textarea>
 					</div>
 			</div>`;
   },
@@ -161,7 +161,7 @@ module.exports = {
 	commentRemove: () => {
 		return `<div class="comment-article-delete">
 					<div class="comment-info"></div>
-					<div class="comment-contents">삭제된 댓글입니다.</div>
+					<div class="comment-contents">${Config.L10N.comment_reply_list_delete}</div>
 					<div class="comment-utils"></div>
 				</div>`;
 	},
@@ -182,7 +182,7 @@ module.exports = {
 						${ (_v.writer.loginUser.uid == window.guid )? `<button class="co-btn btn-delete" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">삭제</button>`: ``}
 						${ (_v.writer.loginUser.uid != window.guid )? `<button class="co-btn btn-declare" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">신고</button>`: ``}
 					</div>
-					<div class="comment-contents">${ ( _v.statusCode == 'DELETE_USER' )? '삭제된 댓글입니다.':  _v.contents }</div>
+					<div class="comment-contents">${ ( _v.statusCode == 'DELETE_USER' )? `${Config.L10N.comment_list_delete}`:  _v.contents }</div>
 					<div class="comment-utils">
 						<button data-commentid="${_v.commentId}" class="co-btn co-btn-like">
 							<i class="fe-icon-like"></i>
@@ -219,10 +219,10 @@ module.exports = {
 							<div id="ncCommunityMoreButton" class="more">
 								<a href="#viewMoreList" class="co-btn co-btn-more"><i class="fe-icon-more"></i></a>
 								<ul id="viewMoreList" class="more-list">
-									<li class="more-items"><button class="co-btn co-btn-bookmark">북마크</button></li>
-									<li class="more-items"><a href="#" class="co-btn co-btn-modify">수정</a></li>
-									<li class="more-items"><button class="co-btn co-btn-delete">삭제</button></li>
-									<li class="more-items"><button 	class="co-btn co-btn-report">신고</button></li>
+									<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>
+									<li class="more-items"><a href="#" class="co-btn co-btn-modify">${Config.L10N.more_modify}</a></li>
+									<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>
+									<li class="more-items"><button 	class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>
 								</ul>
 							</div>
 						</div>
@@ -243,8 +243,8 @@ module.exports = {
 	},
 
 	vote: ( data, goodCount ) => {
-		return `<div><span>추천</span><button id="voteButton">추천</button>
-				<span>${( data && data.voteType == 'FOR' )? '좋아요(추천)했음' : ''}</span>
+		return `<div><span>${Config.L10N.recommend}</span><button id="voteButton">${Config.L10N.recommend}</button>
+				<span>${( data && data.voteType == 'FOR' )? `${Config.L10N.recommend}` : ''}</span>
 				<span id="goodCount">${( goodCount )? `${goodCount}`: 0 }</span>
 			</div>`;
 	},
@@ -258,11 +258,11 @@ module.exports = {
 	},
 
 	scrapButton: ( scrapCount, templateId ) => {
-		return `<button id=${templateId}>스크랩 ${scrapCount}</button>`;
+		return `<button id=${templateId}>${Config.L10N.more_bookmark} ${scrapCount}</button>`;
 	},
 
 	scrapDeleteButton: ( templateId ) => {
-		return `<button id=${templateId}>스크랩 삭제</button>`;
+		return `<button id=${templateId}>${Config.L10N.more_bookmark} ${Config.L10N.more_delete}</button>`;
 	},
 
 	modal: ( _id = 'ncCommunityReportModal' ) => {
@@ -273,75 +273,75 @@ module.exports = {
     return `
 			<div id="${_id}" class="co-layer nc-community-report">
 				<header class="co-layer-header">
-					<h1 class="co-layer-title">신고하기</h1>
+					<h1 class="co-layer-title">${Config.L10N.report_title}</h1>
 					<button class="co-btn co-btn-close ly-close"><i class="fe-icon-close"></i></button>
 				</header>
 
 				<section class="co-layer-contents report-contents">
 					<div class="report-remain">
 						<h2>
-							남은 신고 횟수
-							<span class="wrap-count"><em class="count">16</em>회</span>
+							${Config.L10N.report_remain}
+							<span class="wrap-count"><em class="count">16</em>${Config.L10N.report_number}</span>
 						</h2>
-						<p class="desc">게시물 신고는 하루에 20회까지 가능합니다.</p>
+						<p class="desc">${Config.L10N.report_info}</p>
 					</div>
 
 					<div class="report-target">
-						<h2>신고 대상자</h2>
+						<h2>${Config.L10N.report_username}</h2>
 						<strong class="target"></strong>
 					</div>
 
 					<div class="report-cause">
-						<h2>신고 사유</h2>
+						<h2>${Config.L10N.report_reason}</h2>
 						<ul class="list-cause" id="${commentPrefix}reportCauseList">
 							<li>
-								<label for="${commentPrefix}reportCase1">음란성</label>
+								<label for="${commentPrefix}reportCase1">${Config.L10N.report_reason1}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase1" checked="checked" value="1"/>
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase2">욕설</label>
+								<label for="${commentPrefix}reportCase2">${Config.L10N.report_reason2}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase2" value="2"/>
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase3">일반광고</label>
+								<label for="${commentPrefix}reportCase3">${Config.L10N.report_reason3}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase3" value="3" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase4">현금거래</label>
+								<label for="${commentPrefix}reportCase4">${Config.L10N.report_reason4}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase4" value="4" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase5">불법프로그램</label>
+								<label for="${commentPrefix}reportCase5">${Config.L10N.report_reason5}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase5" value="5" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase6">도배</label>
+								<label for="${commentPrefix}reportCase6">${Config.L10N.report_reason6}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase6" value="6" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase7">개인정보</label>
+								<label for="${commentPrefix}reportCase7">${Config.L10N.report_reason7}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase7" value="7" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase8">저작권위반</label>
+								<label for="${commentPrefix}reportCase8">${Config.L10N.report_reason8}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase8" value="8" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase9">타인비방</label>
+								<label for="${commentPrefix}reportCase9">${Config.L10N.report_reason9}</label>
 								<input type="radio" name="reportCase" id="${commentPrefix}reportCase9" value="9" />
 								<i class="fe-icon-checked"></i>
 							</li>
 							<li>
-								<label for="${commentPrefix}reportCase10">기타</label>
-								<input type="radio" name="reportCase" id="${commentPrefix}reportCase10" value="0" />
+								<label for="${commentPrefix}reportCase0">${Config.L10N.report_reason0}</label>
+								<input type="radio" name="reportCase" id="${commentPrefix}reportCase0" value="0" />
 								<i class="fe-icon-checked"></i>
 							</li>
 						</ul>
@@ -349,8 +349,8 @@ module.exports = {
 				</section>
 
 				<footer class="co-btn-wrap report-btn-wrap">
-					<button class="reportFinish co-btn co-btn-finish">완료</button>
-					<button class="reportCancel co-btn co-btn-cancel ly-close">취소</button>
+					<button class="reportFinish co-btn co-btn-finish">${Config.L10N.btn_finish}</button>
+					<button class="reportCancel co-btn co-btn-cancel ly-close">${Config.L10N.btn_cancel}</button>
 				</footer>
 			</div>`;
   }

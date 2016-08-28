@@ -17,7 +17,7 @@ class Delete{
   }
 
 	template(){
-		return `<li class="more-items"><button class="co-btn co-btn-delete">삭제</button></li>`;
+		return `<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.btn_delete}e</button></li>`;
 	}
 
 	show(){
@@ -28,13 +28,12 @@ class Delete{
 	addEvent(){
 		jQuery( 'body' ).on( 'click', this.selector, ( evt ) => {
 			evt.preventDefault();
-			Util.confirm( '정말로 삭제하시겠습니까?', () => {
+			Util.confirm( Config.L10N.alert_delete_article, () => {
 				this.deleteArticle( ( bool ) => {
 					if( bool ){
-							alert( '삭제되었습니다.');
-							location.href = Config.listPage;
+						location.href = Config.listPage;
 					}else{
-						alert( '삭제되지 않았습니다.');
+						alert( Config.L10N.alert_retry );
 					}
 				});
 			}, () => {});

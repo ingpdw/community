@@ -29,8 +29,9 @@ module.exports = {
     btn_no: '아니오',
     btn_search: '찾기',
     btn_reset: '초기화',
+    btn_finish: '완료',
 
-    // SNS 
+    // SNS
     kakao: '카카오톡',
     kakaostory: '카카오스토리',
     facebook: '페이스북',
@@ -49,7 +50,7 @@ module.exports = {
     share: '공유하기',
     recommend: '추천',
     write: '글쓰기',
-    title: '검색',
+    search: '검색',
     hit: '조회',
     comment: '댓글',
     administrator: '관리자',
@@ -67,7 +68,7 @@ module.exports = {
     search_result: '검색결과',
     search_result_count: '건',
     search_result_return: '돌아가기',
-    
+
     // View
     prev_article: '이전글',
     next_article: '다음글',
@@ -92,7 +93,7 @@ module.exports = {
     write_placeholder_textarea: '내용을 입력하세요.',
     write_placeholder_contents: '내용을 입력하세요.',
     write_attention: '욕설, 도배, 비방, 루머등 운영정책에 어긋나는 게시물 등록 시에는 글쓰기 제한 등 불이익을 받으실 수 있습니다.',
-    
+
     // editor
     editor_font_face: '글꼴',
     editor_font_size: '크기',
@@ -139,6 +140,10 @@ module.exports = {
     alert_retry: '잠시 후에 다시 이용해 주십시요.',
     alert_realname_check: '본인확인을 하신 후에 게임을 이용하실 수 있습니다.',
 
+    //북마크
+    bookmark_have_done: '북마크 되었습니다.',
+    bookmark_already_have_done: '이미 북마크 하셨습니다.',
+
     // 신고하기
     report_title: '신고하기',
     report_info: '게시물 신고는 하루에 20회까지 가능합니다.',
@@ -161,7 +166,8 @@ module.exports = {
     report_select_reason: '신고 사유를 선택해 주세요.',
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
-    report_have_done: '신고 처리 되었습니다.'
+    report_have_done: '신고 처리 되었습니다.',
+    report_already_have_done: '이미 신고하신 글입니다.'
   },
   'en':{
     // Buttons
@@ -192,8 +198,9 @@ module.exports = {
     btn_no: '아니오',
     btn_search: '찾기',
     btn_reset: '초기화',
+    btn_finish: '완료',
 
-    // SNS 
+    // SNS
     kakao: '카카오톡',
     kakaostory: '카카오스토리',
     facebook: '페이스북',
@@ -212,7 +219,7 @@ module.exports = {
     share: '공유하기',
     recommend: '추천',
     write: '글쓰기',
-    title: '검색',
+    search: '검색',
     hit: '조회',
     comment: '댓글',
     administrator: '관리자',
@@ -230,7 +237,7 @@ module.exports = {
     search_result: '검색결과',
     search_result_count: '건',
     search_result_return: '돌아가기',
-    
+
     // View
     prev_article: '이전글',
     next_article: '다음글',
@@ -255,7 +262,7 @@ module.exports = {
     write_placeholder_textarea: '내용을 입력하세요.',
     write_placeholder_contents: '내용을 입력하세요.',
     write_attention: '욕설, 도배, 비방, 루머등 운영정책에 어긋나는 게시물 등록 시에는 글쓰기 제한 등 불이익을 받으실 수 있습니다.',
-    
+
     // editor
     editor_font_face: '글꼴',
     editor_font_size: '크기',
@@ -302,6 +309,10 @@ module.exports = {
     alert_retry: '잠시 후에 다시 이용해 주십시요.',
     alert_realname_check: '본인확인을 하신 후에 게임을 이용하실 수 있습니다.',
 
+    //북마크
+    bookmark_have_done: '북마크 되었습니다.',
+    bookmark_already_have_done: '이미 북마크 하셨습니다.',
+
     // 신고하기
     report_title: '신고하기',
     report_info: '게시물 신고는 하루에 20회까지 가능합니다.',
@@ -324,7 +335,8 @@ module.exports = {
     report_select_reason: '신고 사유를 선택해 주세요.',
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
-    report_have_done: '신고 처리 되었습니다.'
+    report_have_done: '신고 처리 되었습니다.',
+    report_already_have_done: '이미 신고하신 글입니다.'
   },
   'ja':{
     // Buttons
@@ -355,8 +367,9 @@ module.exports = {
     btn_no: '아니오',
     btn_search: '찾기',
     btn_reset: '초기화',
+    btn_finish: '완료',
 
-    // SNS 
+    // SNS
     kakao: '카카오톡',
     kakaostory: '카카오스토리',
     facebook: '페이스북',
@@ -375,7 +388,7 @@ module.exports = {
     share: '공유하기',
     recommend: '추천',
     write: '글쓰기',
-    title: '검색',
+    search: '검색',
     hit: '조회',
     comment: '댓글',
     administrator: '관리자',
@@ -393,7 +406,7 @@ module.exports = {
     search_result: '검색결과',
     search_result_count: '건',
     search_result_return: '돌아가기',
-    
+
     // View
     prev_article: '이전글',
     next_article: '다음글',
@@ -418,7 +431,7 @@ module.exports = {
     write_placeholder_textarea: '내용을 입력하세요.',
     write_placeholder_contents: '내용을 입력하세요.',
     write_attention: '욕설, 도배, 비방, 루머등 운영정책에 어긋나는 게시물 등록 시에는 글쓰기 제한 등 불이익을 받으실 수 있습니다.',
-    
+
     // editor
     editor_font_face: '글꼴',
     editor_font_size: '크기',
@@ -465,6 +478,10 @@ module.exports = {
     alert_retry: '잠시 후에 다시 이용해 주십시요.',
     alert_realname_check: '본인확인을 하신 후에 게임을 이용하실 수 있습니다.',
 
+    //북마크
+    bookmark_have_done: '북마크 되었습니다.',
+    bookmark_already_have_done: '이미 북마크 하셨습니다.',
+
     // 신고하기
     report_title: '신고하기',
     report_info: '게시물 신고는 하루에 20회까지 가능합니다.',
@@ -487,7 +504,8 @@ module.exports = {
     report_select_reason: '신고 사유를 선택해 주세요.',
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
-    report_have_done: '신고 처리 되었습니다.'
+    report_have_done: '신고 처리 되었습니다.',
+    report_already_have_done: '이미 신고하신 글입니다.'
   },
   'zh-tw':{
     // Buttons
@@ -518,8 +536,9 @@ module.exports = {
     btn_no: '아니오',
     btn_search: '찾기',
     btn_reset: '초기화',
+    btn_finish: '완료',
 
-    // SNS 
+    // SNS
     kakao: '카카오톡',
     kakaostory: '카카오스토리',
     facebook: '페이스북',
@@ -538,7 +557,7 @@ module.exports = {
     share: '공유하기',
     recommend: '추천',
     write: '글쓰기',
-    title: '검색',
+    search: '검색',
     hit: '조회',
     comment: '댓글',
     administrator: '관리자',
@@ -556,7 +575,7 @@ module.exports = {
     search_result: '검색결과',
     search_result_count: '건',
     search_result_return: '돌아가기',
-    
+
     // View
     prev_article: '이전글',
     next_article: '다음글',
@@ -581,7 +600,7 @@ module.exports = {
     write_placeholder_textarea: '내용을 입력하세요.',
     write_placeholder_contents: '내용을 입력하세요.',
     write_attention: '욕설, 도배, 비방, 루머등 운영정책에 어긋나는 게시물 등록 시에는 글쓰기 제한 등 불이익을 받으실 수 있습니다.',
-    
+
     // editor
     editor_font_face: '글꼴',
     editor_font_size: '크기',
@@ -628,6 +647,10 @@ module.exports = {
     alert_retry: '잠시 후에 다시 이용해 주십시요.',
     alert_realname_check: '본인확인을 하신 후에 게임을 이용하실 수 있습니다.',
 
+    //북마크
+    bookmark_have_done: '북마크 되었습니다.',
+    bookmark_already_have_done: '이미 북마크 하셨습니다.',
+
     // 신고하기
     report_title: '신고하기',
     report_info: '게시물 신고는 하루에 20회까지 가능합니다.',
@@ -650,6 +673,7 @@ module.exports = {
     report_select_reason: '신고 사유를 선택해 주세요.',
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
-    report_have_done: '신고 처리 되었습니다.'
+    report_have_done: '신고 처리 되었습니다.',
+    report_already_have_done: '이미 신고하신 글입니다.'
   }
 }

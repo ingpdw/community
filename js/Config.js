@@ -114,10 +114,8 @@ let Config = {
 
   //API에러처리
   apiError: ( data, loginPage ) => {
-
     if( data.status == '401' || data.exceptionClassName == 'AccessDeniedException' ){
-      //@TODO L10N msg
-      alert( '로그인이 필요합니다.' );
+      alert( L10N[ jQuery('html').attr('lang') || 'ko' ].alert_login );
 			if( loginPage )
 				location.href = loginPage + '?return_url=' + encodeURIComponent( location.href );
       return;

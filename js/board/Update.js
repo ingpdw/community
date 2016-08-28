@@ -18,7 +18,7 @@ class Update{
   }
 
 	template(){
-		return `<li class="more-items"><a href="#" class="co-btn co-btn-modify">수정</a></li>`;
+		return `<li class="more-items"><a href="#" class="co-btn co-btn-modify">${Config.L10N.btn_modify}</a></li>`;
 	}
 
 	show(){

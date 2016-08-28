@@ -21,9 +21,9 @@ class Search{
 
   setCategoryUI(){
 		let tmp = [], searchTypes = [
-			{categoryId: 'content', categoryName: '제목+내용'},
-			{categoryId: 'title', categoryName: '제목'},
-			{categoryId: 'writer', categoryName: '작성자'}
+			{categoryId: 'content', categoryName: Config.L10N.search_searchtype_content},
+			{categoryId: 'title', categoryName: Config.L10N.search_searchtype_title},
+			{categoryId: 'writer', categoryName: Config.L10N.search_searchtype_writer}
 		];
 
 		for( let item of searchTypes ){

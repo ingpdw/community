@@ -8,11 +8,11 @@ import Template from './Template.js';
 import Tmpl from 'js-template-string';
 
 class CommentListWrap{
-	constructor( $parent, callback ){
+	constructor( $parent/*, callback */ ){
 		this.$parent = $parent;
 		this._id = this.$parent.attr( 'id' );
 		this.articleId = Util.getParams().articleId;
-		this.callback = callback;
+		//this.callback = callback;
 		this.id = 'commentThread';
   }
 

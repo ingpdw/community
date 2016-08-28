@@ -94,7 +94,7 @@ class ListInfinite{
   }
 
 	setMoreButtonUI() {
-		return `<button class="ncCommmentMore">더보기</button>`;
+		return `<button class="ncCommmentMore">${Config.L10N.btn_more}</button>`;
 	}
 
 	removeMoreButton() {
@@ -190,9 +190,6 @@ class ListInfinite{
 				}
 				//end
 			}else{
-
-				console.log( Config.isCardView )
-				console.log( Config.isListView )
 				tmp = ( pInfo.getParamByKey( 'viewMode' ) == 'card' || ( Config.isCardView && !Config.isListView ) )?
 					Template.cardList( data, this.listId ):
 					Template.list( data, this.listId );
