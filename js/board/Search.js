@@ -33,7 +33,7 @@ class Search{
 			})
 		}
 
-		this.dropdownLayer = new DropdownLayer( this.$parent, tmp, this._wrapId, 'board-search');
+		this.dropdownLayer = new DropdownLayer( this.$parent, tmp, this._wrapId, 'board-search' );
 		this.dropdownLayer.addChange( ( data ) => {
 			let query = this.getQuery();
 			if( query && data )

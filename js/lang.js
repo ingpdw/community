@@ -167,7 +167,20 @@ module.exports = {
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
     report_have_done: '신고 처리 되었습니다.',
-    report_already_have_done: '이미 신고하신 글입니다.'
+    report_already_have_done: '이미 신고하신 글입니다.',
+
+    'a_few_seconds_ago': '몇 초 전',
+    'seconds_ago': '초 전',
+    'a_minute_ago': '일 분 전',
+    'minutes_ago': '분 전',
+    'an_hour_ago': '한 시간 전',
+    'hours_ago': 'hours ago',
+    'a_day_ago': 'a day ago',
+    'days_ago': 'days ago',
+    'a_month_ago': 'a month ago',
+    'months_ago': 'months ago',
+    'a_year_ago': 'a year ago',
+    'years_ago': 'years ago'
   },
   'en':{
     // Buttons
@@ -336,7 +349,25 @@ module.exports = {
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
     report_have_done: '신고 처리 되었습니다.',
-    report_already_have_done: '이미 신고하신 글입니다.'
+    report_already_have_done: '이미 신고하신 글입니다.',
+
+    'a_few_seconds_ago': 'a few seconds ago',
+    'seconds_ago': 'seconds ago',
+
+    'a_minute_ago': 'a minute ago',
+    'minutes_ago': 'minutes ago',
+
+    'an_hour_ago': 'an hour ago',
+    'hours_ago': 'hours ago',
+
+    'a_day_ago': 'a day ago',
+    'days_ago': 'days ago',
+
+    'a_month_ago': 'a month ago',
+    'months_ago': 'months ago',
+
+    'a_year_ago': 'a year ago',
+    'years_ago': 'years ago'
   },
   'ja':{
     // Buttons
@@ -505,7 +536,25 @@ module.exports = {
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
     report_have_done: '신고 처리 되었습니다.',
-    report_already_have_done: '이미 신고하신 글입니다.'
+    report_already_have_done: '이미 신고하신 글입니다.',
+
+    'a_few_seconds_ago': 'a few seconds ago',
+    'seconds_ago': 'seconds ago',
+
+    'a_minute_ago': 'a minute ago',
+    'minutes_ago': 'minutes ago',
+
+    'an_hour_ago': 'an hour ago',
+    'hours_ago': 'hours ago',
+
+    'a_day_ago': 'a day ago',
+    'days_ago': 'days ago',
+
+    'a_month_ago': 'a month ago',
+    'months_ago': 'months ago',
+
+    'a_year_ago': 'a year ago',
+    'years_ago': 'years ago'
   },
   'zh-tw':{
     // Buttons
@@ -674,6 +723,24 @@ module.exports = {
     report_error_again: '신고중에 오류가 발생했습니다. 다시 한번 시도해주세요.',
     report_reason: '신고 사유를 선택해 주세요.',
     report_have_done: '신고 처리 되었습니다.',
-    report_already_have_done: '이미 신고하신 글입니다.'
+    report_already_have_done: '이미 신고하신 글입니다.',
+
+    'a_few_seconds_ago': 'a few seconds ago',
+    'seconds_ago': 'seconds ago',
+
+    'a_minute_ago': 'a minute ago',
+    'minutes_ago': 'minutes ago',
+
+    'an_hour_ago': 'an hour ago',
+    'hours_ago': 'hours ago',
+
+    'a_day_ago': 'a day ago',
+    'days_ago': 'days ago',
+
+    'a_month_ago': 'a month ago',
+    'months_ago': 'months ago',
+
+    'a_year_ago': 'a year ago',
+    'years_ago': 'years ago'
   }
 }

@@ -3,7 +3,20 @@ import Util from '../Util.js';
 import Template from 'js-template-string';
 import DateFormat from 'date-format-simple';
 
-let dateFormat = new DateFormat( window.today || new Date );
+let dateFormat = new DateFormat( window.today || new Date, {
+  'a_few_seconds_ago': Config.L10N.a_few_seconds_ago,
+  'seconds_ago': Config.L10N.seconds_ago,
+  'a_minute_ago': Config.L10N.a_minute_ago,
+  'minutes_ago': Config.L10N.minutes_ago,
+  'an_hour_ago': Config.L10N.an_hour_ago,
+  'hours_ago': Config.L10N.hours_ago,
+  'a_day_ago': Config.L10N.a_day_ago,
+  'days_ago': Config.L10N.days_ago,
+  'a_month_ago': Config.L10N.a_month_ago,
+  'months_ago': Config.L10N.months_ago,
+  'a_year_ago': Config.L10N.a_year_ago,
+  'years_ago': Config.L10N.years_ago,
+});
 
 module.exports = {
 	listTop: () => {
@@ -13,21 +26,14 @@ module.exports = {
 				<div class="board-top-utils">
 					<div class="board-btngroup">
 						<button class="co-btn co-btn-search"><i class="fe-icon-search"></i></button>
-						<button class="co-btn btn-cards"><i class="fe-icon-cards"></i></button>
-						<button class="co-btn btn-list"><i class="fe-icon-list"></i></button>
-						<button class="co-btn btn-write"><i class="fe-icon-write"></i></button>
+            ${( Config.isCardView && Config.isListView )? `<button class="co-btn btn-cards"><i class="fe-icon-cards"></i></button>`: ``}
+            ${( Config.isCardView && Config.isListView)? `<button class="co-btn btn-list"><i class="fe-icon-list"></i></button>`: ``}
+            ${( Config.isWrite )? `<button class="co-btn btn-write"><i class="fe-icon-write"></i></button>`: ``}
 					</div>
 				</div>`
 		});
 
 		return _top;
-	},
-
-	empty: ( _id, _list ) => {
-		return Template.render({
-			data: _list,
-			template: ( list ) => `<ul class="${_id} board-list-default">${_list}</ul>` //board-list-event
-		});
 	},
 
 	noticeList: ( _data ) => {
@@ -54,7 +60,7 @@ module.exports = {
 								<img src="${articleList.thumbnailUrl}" alt=""></a>
 						</div>`: ''}
 						<div class="title">
-							<span class="category">${articleList.category.categoryName}</span>
+							<!--span class="category">${articleList.category.categoryName}</span-->
 						  <a href="${ articleList.url || `${Config.viewPage}?articleId=${articleList.articleId}` }">${articleList.title}</a>
 							${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
 							<!--i class="fe-icon-new"></i-->
@@ -93,7 +99,7 @@ module.exports = {
 			template: ( articleList ) => `
 			<li class="board-items" data-articleid="${articleList.articleId}">
             <div class="title">
-                <span class="category">${articleList.category.categoryName}</span>
+                <!--span class="category">${articleList.category.categoryName}</span-->
                 <a href="${Config.viewPage}?articleId=${articleList.articleId}${param}">${articleList.title}</a>
                 ${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
                 <!--i class="fe-icon-new"></i-->
@@ -161,7 +167,7 @@ module.exports = {
 	commentRemove: () => {
 		return `<div class="comment-article-delete">
 					<div class="comment-info"></div>
-					<div class="comment-contents">${Config.L10N.comment_reply_list_delete}</div>
+					<div class="comment-contents">${Config.L10N.comment_list_delete}</div>
 					<div class="comment-utils"></div>
 				</div>`;
 	},
@@ -179,8 +185,8 @@ module.exports = {
 						<!--span class="best">BEST</span-->
 						<span class="writer">${_v.writer.loginUser.name}</span>
 						<span class="date">${dateFormat.print( dateFormat.toGMTDate( _v.updateDate ) )}</span>
-						${ (_v.writer.loginUser.uid == window.guid )? `<button class="co-btn btn-delete" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">삭제</button>`: ``}
-						${ (_v.writer.loginUser.uid != window.guid )? `<button class="co-btn btn-declare" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">신고</button>`: ``}
+						${ (_v.writer.loginUser.uid == Config.guid )? `<button class="co-btn btn-delete" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">삭제</button>`: ``}
+						${ (_v.writer.loginUser.uid != Config.guid )? `<button class="co-btn btn-declare" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">신고</button>`: ``}
 					</div>
 					<div class="comment-contents">${ ( _v.statusCode == 'DELETE_USER' )? `${Config.L10N.comment_list_delete}`:  _v.contents }</div>
 					<div class="comment-utils">
@@ -202,7 +208,26 @@ module.exports = {
 		return `<div class="nc-community-loader"><div class="loader-circle"></div></div>`;
 	},
 
-  view: ( _data ) => {
+  viewSignature: ( _data ) => {
+    return Template.render({
+      data: _data,
+      template: ( _v, _writer = _data.article.writer ) => `
+        <div class="view-signature">
+  				<div class="thumb"><img src="http://dn.sfile.plaync.com/data/${_writer.loginUser.uid}/profile?type=small" alt=""></div>
+
+  				<div class="writer">${_writer.loginUser.name}</div>
+
+  				<!--div class="info">
+  					<span class="jon">${_writer.gameUser.gameCharacterName}</span>
+            <span class="servername"></span>
+            <span class="level"></span>
+            <span class="clan"></span>
+  				</div-->
+			  </div>`
+    });
+  },
+
+  view: ( _data, _template ) => {
 		return Template.render({
 			data: _data,
 			template: ( _v, _article = _v.article ) => `
@@ -216,13 +241,13 @@ module.exports = {
 							<span class="hit">조회<em>${_article.hitCount}</em></span>
 							<span class="comment">댓글<em>${_article.commentCount}</em></span>
 
-							<div id="ncCommunityMoreButton" class="more">
+							<div class="ncCommunityMoreButton more">
 								<a href="#viewMoreList" class="co-btn co-btn-more"><i class="fe-icon-more"></i></a>
 								<ul id="viewMoreList" class="more-list">
 									<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>
-									<li class="more-items"><a href="#" class="co-btn co-btn-modify">${Config.L10N.more_modify}</a></li>
-									<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>
-									<li class="more-items"><button 	class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>
+									${( Config.isAdmin )? ``: `<li class="more-items"><a href="#" class="co-btn co-btn-modify">${Config.L10N.more_modify}</a></li>`}
+									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>`}
+									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>`}
 								</ul>
 							</div>
 						</div>
@@ -238,6 +263,8 @@ module.exports = {
 						</button>
 						${( Config.share && Config.share.msg && nc && nc.uikit && nc.uikit.ShareV2 )? `<div id="ncShare" class="share"></div>` : ''}
 					</div>
+
+          ${ ( Config.isAdmin || _article.writer.adminUser )? ``: _template.viewSignature( _data ) }
 				</section>`
 		});
 	},
@@ -353,5 +380,21 @@ module.exports = {
 					<button class="reportCancel co-btn co-btn-cancel ly-close">${Config.L10N.btn_cancel}</button>
 				</footer>
 			</div>`;
-  }
+  },
+
+	listMsg: ( data ) => {
+		return `<div class="board-list-none"><p>등록된 글이 없습니다.</p></div>`;
+		//<p>검색 결과가 없습니다.</p>
+		//<p>제재된 계정입니다. 자세한 사항은 고객센터로 문의 바랍니다</p>
+		//<p>접근 권한이 없는 페이지 입니다.</p>
+		//<p>본인 확인이 필요합니다.</p>
+		//<p>진행 중인 이벤트가 없습니다./p&gt;
+	},
+
+	empty: ( _id, _list ) => {
+		return Template.render({
+			data: _list,
+			template: ( list ) => `<ul class="${_id} board-list-none">${_list}</ul>` //board-list-event
+		});
+	}
 }

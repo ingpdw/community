@@ -8,6 +8,7 @@ import Search from './Search';
 import Template from './Template';
 import DropdownLayer from '../DropdownLayer';
 import ParamInfo from './ParamInfo';
+import ListCategory from './ListCategory';
 import PageNavigation from './PageNavigation';
 import ListTopUtil from './ListTopUtil';
 import NoticeList from './NoticeList';
@@ -19,6 +20,8 @@ class List{
 		this._id = this.$node.attr( 'id' );
 		this.listId = 'ncCommunityBoardList';
 
+		jQuery.extend( true, Config, options );
+
 		Config.board = ( options && options.board )?
 			options.board: Config.board;
 
@@ -28,9 +31,10 @@ class List{
 		Config.isListView = ( options && options.isListView )?
 			options.isListView: false;
 
-		Config.listViewMode = ( Config.isCardView )? 'card': 'list';
+		Config.isTopNotice = ( options && options.isTopNotice )?
+			options.isTopNotice: false;
 
-		this.viewMode =  Util.getParams().viewMode || Config.listViewMode || 'list'; //[ list | card ]
+		this.viewMode =  Util.getParams().viewMode|| 'list'; //[ list | card ]
 
 		//menu Module
 		let listTopUtil = new ListTopUtil( this.$node, ( viewMode ) => {
@@ -44,8 +48,10 @@ class List{
 			location.href = Config.listPage + '?' + pInfo.getParam();
 		});
 
-		let noticeList = new NoticeList( this.$node );
-		noticeList.get();
+		if( Config.isTopNotice ){
+			let noticeList = new NoticeList( this.$node );
+			noticeList.get();
+		}
 
 		//parameter & hash Module - page, query, searchType, articleId
 		this.paramInfo = new ParamInfo();
@@ -53,11 +59,22 @@ class List{
 		//pagenavigation Module
 		this.pageNavigation = new PageNavigation( this.paramInfo );
 
+		let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
+		listCategory.onChange.add( ( data ) => {
+			let pInfo = this.paramInfo;
+			let viewMode = pInfo.getParamByKey( 'viewMode' );
+			let query = pInfo.getParamByKey( 'query' );
+			let searchType = pInfo.getParamByKey( 'searchType' );
+			
+			location.href = Config.listPage +
+				`?viewMode=${viewMode}&query=${query}&searchType=${searchType}&page=1&categoryId=${data}`;
+		});
+
 		//board search Module
 		this.search = new Search( listTopUtil.getNode(), ( query = '', searchType = '' ) => {
 			let pInfo = this.paramInfo;
 			location.href = Config.listPage +
-				`?viewMode=${pInfo.getParamByKey( 'viewMode' )}&query=${query}&searchType=${searchType}&page=1`;
+				`?viewMode=${pInfo.getParamByKey( 'viewMode' )}&query=${query}&searchType=${searchType}&page=1&categoryId=${pInfo.getParamByKey( 'categoryId' )}`;
 		});
   }
 
@@ -76,11 +93,14 @@ class List{
 		pInfo.setParam( ['viewMode', this.viewMode || '' ] );
 		pInfo.setParam( ['searchType', _param.searchType || '' ] );
 		pInfo.setParam( ['query', _param.query || '' ] );
+		pInfo.setParam( ['categoryId', _param.categoryId || '' ] );
 
 		let list = Util.get( Config.list( Config.board, page ), 'GET', {
 			page: page,
 			query: decodeURIComponent( pInfo.getParamByKey( 'query' ) ),
-			searchType: pInfo.getParamByKey( 'searchType' )
+			searchType: pInfo.getParamByKey( 'searchType' ),
+			categoryId: pInfo.getParamByKey( 'categoryId' ),
+			summary: ( pInfo.getParamByKey( 'viewMode' ) == 'card' )? true: false
 		});
 
     list.then( ( data ) => {
@@ -90,7 +110,7 @@ class List{
 			this.remove();
 
 			//set data to search Module
-			this.search.setQuery( pInfo.getParamByKey( 'query' ) );
+			this.search.setQuery( decodeURIComponent( pInfo.getParamByKey( 'query' ) ) );
 			this.search.setSearchType( pInfo.getParamByKey( 'searchType' ) );
 
 			//empty data
@@ -100,7 +120,7 @@ class List{
 			}else{
 				let page = this.pageNavigation.setUI( data.pageNavigation );
 
-				if( this.viewMode == 'card' ){
+				if( this.viewMode == 'card' && Config.isCardView ){
 						tmp = Template.cardList( data, this.listId, pInfo.getParam() );
 				}else{
 						tmp = Template.list( data, this.listId, pInfo.getParam() );

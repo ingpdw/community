@@ -14,7 +14,7 @@ class DropdownLayer{
 		this.$_node = jQuery( this.template( data, className ) );
 		this.$node.append( 	this.$_node );
 		this.$callback = $.Callbacks();
-		this.dropDownLayer =  '#' + this.name + ' .ui-dropdown-custom';
+		this.dropDownLayer =  '#' + this.name + ' .ui-dropdown-community';
 
 		let dropdownLayer = this.dropDownLayer;
 		let dropdownLayerTitle =  dropdownLayer + ' .select';
@@ -78,14 +78,17 @@ class DropdownLayer{
 
 	setValue( val = '' ) {
 		if( !val ) return;
-		let text = jQuery( this.dropDownLayer ).find( '.option' ).find( `[data-value="${val}"]` ).text();
-		jQuery( this.dropDownLayer ).find( '.select' ).find( 'span' ).text( text || '' );
-		this.textValue = text;
-		this.listValue = val;
-		//mobile
-		if( val ) jQuery( '#' + this.name ).find( 'select' ).val( val );
 
+		let valueNode = jQuery( this.dropDownLayer ).find( '.option' ).find( `[data-value="${val}"]` );
 
+		if( valueNode.length ){
+				let text = jQuery( this.dropDownLayer ).find( '.option' ).find( `[data-value="${val}"]` ).text();
+				jQuery( this.dropDownLayer ).find( '.select' ).find( 'span' ).text( text || '' );
+				this.textValue = text;
+				this.listValue = val;
+				//mobile
+				if( val ) jQuery( '#' + this.name ).find( 'select' ).val( val );
+		}
 	}
 
 	getValue() {
@@ -113,7 +116,7 @@ class DropdownLayer{
 				</div>
 
 				<!-- pc -->
-				<div class="ui-dropdown ui-dropdown-custom">
+				<div class="ui-dropdown ui-dropdown-community">
 					<div class="select">
 						<span>분류</span>
 						<i class="fe-icon-chevron_down"></i>

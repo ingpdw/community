@@ -21,7 +21,7 @@ class Delete{
 	}
 
 	show(){
-		if( window.guid != this.guid )
+		if( Config.guid != this.guid )
 			jQuery( this.selector ).hide();
 	}
 

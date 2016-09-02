@@ -12,6 +12,9 @@ class Write{
 	constructor( $node, options ){
 		this.$node = $node;
 		this.articleId = Util.getParams().articleId;
+
+		jQuery.extend( true, Config, options );
+
 		Config.board = ( options.board )? options.board: Config.board;
 		this.$node.append( this.template() );
 
@@ -43,7 +46,7 @@ class Write{
 			let _contents = _article.contents;
 			let _$contents = '';
 
-			if( window.guid == _uid ){
+			if( Config.guid == _uid ){
 				jQuery( '#title' ).val( _title );
 				_$contents = jQuery( '<div>' );
 				_$contents.append( _contents );
@@ -53,6 +56,7 @@ class Write{
 				_$contents.find( '.fe-video .fe-video-inner iframe' ).after( this.removeButtonUI() );
 
 				_$contents = _$contents.clone().html();
+
 				this.editor.insert( _$contents );
 			}
 		});
@@ -67,7 +71,8 @@ class Write{
 			})
 		}
 
-		new DropdownLayer( jQuery( '.board-write-category' ), tmp, 'boardCategory' );
+		let dropdownLayer = new DropdownLayer( jQuery( '.board-write-category' ), tmp, 'boardCategory' );
+		dropdownLayer.setValue( Util.getParams().categoryId|| '' );
 	}
 
 	getCategory(){
@@ -131,6 +136,18 @@ class Write{
 		jQuery( 'body' ).on( 'click', '#boardWriteSubmit', ( evt ) => {
 			evt.preventDefault();
 			let contents = this.editor.getSubmitContents();
+			let _title = jQuery( '#title' ).val();
+
+			if( _title.length < 2 ){
+				alert( Config.L10N.alert_too_short_title );
+				return;
+			}
+
+			if( _title.length > 50 ){
+				alert( Config.L10N.alert_too_long_title );
+				return;
+			}
+
 			let data = {
 				articleId: this.articleId,
 				token_id: this.editor.getToken(),
@@ -146,7 +163,13 @@ class Write{
 
 		jQuery( 'body' ).on( 'click', '#boardWriteCancel', ( evt ) => {
 			evt.preventDefault();
-			this.reset();
+
+			Util.confirm( Config.L10N.alert_cancel_article, () => {
+				jQuery( '#title' ).val( '' );
+				this.reset();
+
+				location.href = Config.listPage;
+			}, () => {});
 		});
 	}
 

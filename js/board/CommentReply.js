@@ -6,6 +6,7 @@ import Config from '../Config.js';
 import Util from '../Util.js';
 import Template from './Template.js';
 import Tmpl from 'js-template-string';
+import Observer from 'js-observer';
 
 class CommentReply{
 	constructor( $parent ){
@@ -16,13 +17,15 @@ class CommentReply{
 		this.currTarget = '';
 		this.removeCommentId = '';
 		this.$write = '';
+
+		this.onReply = new Observer;
   }
 	setUI(){
 		let id = 'contentReply';
 		this.$write = jQuery( Template.commentWrite( id ) );
 
 		jQuery( 'body' ).on( 'focus', `#${this._id} .${id}` , ( evt ) => {
-			if( !window.guid ){
+			if( !Config.guid ){
 				jQuery( `#${this._id} .${id}` ).blur();
 				Config.apiError( {status: 401} );
 				return;
@@ -36,9 +39,21 @@ class CommentReply{
 				evt.preventDefault();
 				let _$this = jQuery( `#${this._id} .${id}` );
 
+				let _val = _$this.val();
+
+				if( _val.length == 0 ){
+					alert( Config.L10N.alert_empty_reply );
+					return;
+				}
+
+				if( _val.length > 300 ){
+					alert( Config.L10N.comment_placeholder_login );
+					return;
+				}
+
 				this.submit({
 					commentId: this.commentId,
-					contents: _$this.val()
+					contents: _val
 				}, ( data ) => {
 
 					if( data.number ){
@@ -47,13 +62,13 @@ class CommentReply{
 								depth: 1,
 								commentId: data.number || '',
 								updateDate: data.generatedDate || '',
-								contents: _$this.val() || '',
+								contents: _val || '',
 								goodCount: 0,
 								replyCount: 0,
 								writer: {
 									loginUser: {
-										uid: window.guid || '',
-										name: window.nickname || ''
+										uid: Config.guid || '',
+										name: Config.nickname || ''
 									}
 								}
 							}]
@@ -61,7 +76,7 @@ class CommentReply{
 
 						let _comment = Template.commentList( item );
 						let _$article = jQuery( `#${this._id} .comment-article[data-commentid=${this.commentId}]` );
-						let _$articleComments = _$article.nextAll( '.comment-article:first' );
+						let _$articleComments = _$article.nextAll( '.comment-article:first, .comment-article-delete:first' ).first();
 
 						( _$articleComments.length )?
 							_$articleComments.before( _comment ):
@@ -71,6 +86,8 @@ class CommentReply{
 						let commentCount = _$article.find( '.co-btn-comments .text' );
 						commentCount.text( parseInt( commentCount.text() || '0' ) + 1 );
 						_$this.val( '' );
+
+						this.onReply.emit();
 					}
 				});
 			}else{

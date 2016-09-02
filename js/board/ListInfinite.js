@@ -33,6 +33,8 @@ class ListInfinite{
 		//clicked article id
 		this.articleId = 0;
 
+		jQuery.extend( true, Config, options );
+
 		Config.board = ( options && options.board )?
 			options.board: Config.board;
 
@@ -44,6 +46,9 @@ class ListInfinite{
 
 		Config.isListView = ( options && options.isListView )?
 			options.isListView: false;
+
+		Config.isTopNotice = ( options && options.isTopNotice )?
+			options.isTopNotice: false;
 
 		Config.listViewMode = ( Config.isCardView )? 'card': 'list';
 
@@ -87,8 +92,10 @@ class ListInfinite{
 		//get prev, next article Info
 		this.prevNextArticle = new PrevNextArticle();
 
-		let noticeList = new NoticeList( this.$node );
-		noticeList.get();
+		if( Config.isTopNotice ){
+			let noticeList = new NoticeList( this.$node );
+			noticeList.get();
+		}
 
 		this.addEvent();
   }
@@ -168,7 +175,8 @@ class ListInfinite{
 			query: pInfo.getParamByKey( 'query' ),
 			searchType: pInfo.getParamByKey( 'searchType' ),
 			moreDirection: this.moreDirection,
-			previousArticleId: this.articleId
+			previousArticleId: this.articleId,
+			summary: true
 		});
 
 		//show Loading animation

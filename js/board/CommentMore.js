@@ -8,13 +8,12 @@ import InfiniteScroll from '../InfiniteScroll.js';
 import Template from './Template.js';
 import Loading from '../Loading';
 import Tmpl from 'js-template-string';
+import Observer from 'js-observer';
 
 class CommentMore{
-	constructor( $node, callback ){
+	constructor( $node ){
 		this.$node = $node;
 		this._id = this.$node.attr( 'id' );
-		this.callback = callback;
-		//this.callback = new Promise( (resolve, reject ) => {});
 
 		this.infiniteScroll = new InfiniteScroll( ( dir ) => {
 			if( dir == 'down' ) this.get();
@@ -22,6 +21,8 @@ class CommentMore{
 		this.addEvent();
 
 		this.loading = new Loading( this.$node );
+
+		this.onMore = new Observer;
   }
 
 	setUI() {
@@ -63,7 +64,7 @@ class CommentMore{
 				this.infiniteScroll.stop( 'down' );
 			}
 
-			this.callback && this.callback( data );
+			this.onMore.emit( data );
 			this.infiniteScroll.loadedEnd();
 
 			this.loading.hide();

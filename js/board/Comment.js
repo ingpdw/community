@@ -26,42 +26,57 @@ class Comment{
 
 		Config.board = ( options.board )? options.board: Config.board;
 
-		//comment Reply
-		this.commentReply = new CommentReply( this.$node );
+		jQuery.extend( true, Config, options );
 
 		//like button
 		this.commentVote = new CommentVote( this.$node );
 
 		//remove Comment Article
 		this.commentRemove = new CommentRemove( this.$node );
+		this.commentRemove.onRemove.add( () => {
+			let totalCount = this.commentHeader.getCommentCount() - 1;
+			this.commentHeader.setCommentCount(
+				( totalCount && totalCount > 0 )?
+					totalCount: 0 );
+		}, this );
 
 		//comment wrap UI
 		this.commentListWrap = new CommentListWrap( this.$node );
 
 		//reload comment
-		this.commentReload = new CommentReload( this.$node, () => {
+		this.commentReload = new CommentReload( this.$node );
+		this.commentReload.onReload.add( () => {
 			this.commentListWrap.empty();
 			this.reloadComment();
-		});
-
-		//write comment
-		this.commentWrite = new CommentWrite( this.$node, ()=> {
-			this.commentListWrap.empty();
-			this.reloadComment();
-			this.commentWrite.clear();
-		});
+		}, this );
 
 		//comment count UI
 		this.commentHeader = new CommentHeader( this.$node );
+
+		//write comment
+		this.commentWrite = new CommentWrite( this.$node )
+		this.commentWrite.onWrite.add( ()=> {
+			this.commentListWrap.empty();
+			this.reloadComment();
+			this.commentWrite.clear();
+		}, this );
+
+		//comment Reply
+		this.commentReply = new CommentReply( this.$node );
+		this.commentReply.onReply.add( ()=> {
+			this.commentHeader.setCommentCount( this.commentHeader.getCommentCount() + 1 );
+		}, this );
+
 
 		//comment report UI
 		this.commentReport = new CommentReport( this.$node, jQuery( 'body' ) );
 
 		//more button
-		this.commentMore = new CommentMore( this.$node, ( data ) => {
+		this.commentMore = new CommentMore( this.$node);
+		this.commentMore.onMore.add( ( data ) => {
 			this.commentListWrap.appendList( Template.commentList( data ) );
 			this.myLikeComment( data.likeCommentIds );
-		});
+		}, this );
 
 		//loading spinner
 		this.loading = new Loading( this.$node );
@@ -88,7 +103,7 @@ class Comment{
     let comment = Util.get( commentUrl );
     comment.then( ( data ) => {
 			let body = Template.commentList( data );
-			this.commentHeader.setCommentCount( data.pageNavigation.totalCount );
+			this.commentHeader.setCommentCount( data.pageNavigation.totalCount + data.pageNavigation.replyCount );
 			this.commentListWrap.appendList( body );
 
     }, ( data ) => {
@@ -109,7 +124,7 @@ class Comment{
 
 		let articleId = _param.articleId;
 
-		//if This article is notice Article,
+		//if This article is notice Article, it has done.
 		if( _param.isNotice == '1' ){
 			this.loading.hide();
 			return;
@@ -122,17 +137,31 @@ class Comment{
 
     let comment = Util.get( commentUrl );
     comment.then( ( data ) => {
+
+			//set comment Header UI
 			let header =  this.commentHeader.setUI( data.pageNavigation );
+
+			//set comment write textare UI
 			let write = this.commentWrite.setUI();
+
+			//set comment Reply textarea UI
 			let commentReply = this.commentReply.setUI();
+
+			//set comment List UI
 			let body = this.commentListWrap.setUI( Template.commentList( data ) );
+
+			//set comment more button UI
 			let more = this.commentMore.setUI();
+
+			//merge comment Template String
 			let wrapComment = Template.comment( header + write + body + more );
+
 			this.$node.append( wrapComment );
 			this.$node.append( commentReply.hide() );
 
 			this.myLikeComment( data.likeCommentIds );
 
+			//If it's the last page, remove more button
 			if( data.pageNavigation.endPage <= 1 ){
 				this.commentMore.remove();
 			}

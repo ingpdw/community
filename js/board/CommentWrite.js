@@ -6,14 +6,16 @@ import Config from '../Config.js';
 import Util from '../Util.js';
 import Template from './Template.js';
 import Tmpl from 'js-template-string';
+import Observer from 'js-observer';
 
 class CommentWrite{
-	constructor( $parent, callback ){
+	constructor( $parent ){
 		this.$parent = $parent;
 		this._id = this.$parent.attr( 'id' );
 		this.articleId = Util.getParams().articleId;
-		this.callback = callback;
 		this.id = 'contentWrite';
+
+		this.onWrite = new Observer;
   }
 	setUI(){
 		let write = Template.commentWrite( this.id );
@@ -22,15 +24,27 @@ class CommentWrite{
 			if( key == 13 ){
 				evt.preventDefault();
 				let _$this = jQuery( `#${this._id} .${this.id}` );
+				let _val = _$this.val();
+
+				if( _val.length == 0 ){
+					alert( Config.L10N.alert_empty_comment );
+					return;
+				}
+
+				if( _val.length > 300 ){
+					alert( Config.L10N.comment_placeholder_login );
+					return;
+				}
+
 				this.submit({
-					contents: _$this.val()
+					contents: _val
 				}, () => {});
 			}else{
 			}
 		});
 
 		jQuery( 'body' ).on( 'focus', `#${this._id} .${this.id}` , ( evt ) => {
-			if( !window.guid ){
+			if( !Config.guid ){
 				jQuery( `#${this._id} .${this.id}` ).blur();
 				Config.apiError( {status: 401} );
 				return;
@@ -51,7 +65,7 @@ class CommentWrite{
 	submit( data ){
 		let _post = Util.get( Config.comment( {'board': Config.board, articleId: this.articleId} ), 'POST', data );
 		_post.then( ( data ) => {
-			this.callback && this.callback( data );
+			this.onWrite.emit( data );
 		}, ( data ) => {
 			Config.apiError( data );
 		});

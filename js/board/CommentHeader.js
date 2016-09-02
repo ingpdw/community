@@ -20,7 +20,7 @@ class CommentHeader{
 			data: data,
 			template: ( _v ) => `
 				<div class="comment-header">
-					<h3 class="comment-title">댓글<span class="commentTotalCount">${_v.totalCount}</span></h3>
+					<h3 class="comment-title">댓글<span class="commentTotalCount">${ ( _v.totalCount + _v.replyCount )}</span></h3>
 					<button class="co-btn co-btn-reload"><i class="fe-icon-reload"></i></button>
 				</div>
 			`
@@ -30,6 +30,15 @@ class CommentHeader{
 	setUI( data ){
 		let header =  this.template( data );
 		return header;
+	}
+
+	getCommentCount(){
+		let count = parseInt( jQuery( `#${this._id} .commentTotalCount` ).text() );
+		if( count ){
+			return count;
+		}else{
+			return 0;
+		}
 	}
 
 	setCommentCount( totalCount ){

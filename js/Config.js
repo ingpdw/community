@@ -11,6 +11,11 @@ import Tmpl from 'js-template-string';
 
 let Config = {
 
+	guid: ( window.userData && window.userData.guid )? window.userData.guid: '',
+
+	now: ( window.userData && window.userData.now )? window.userData.now: '',
+
+	nickName: ( window.userData && window.userData.nickName )? window.userData.nickName: '',
 
   //L20N, default: ko
   L10N: L10N[ jQuery('html').attr('lang') || 'ko' ],
@@ -31,6 +36,8 @@ let Config = {
   isAdmin: false,
 
   isWrite: true,
+
+	isShare: true,
 
   listSize: 12,
 
@@ -82,6 +89,15 @@ let Config = {
   //POST, 글 좋아요
   vote: ( data ) => `${window._path || '/'}board/${data.board}/article/${data.articleId}/voteArticle.json`,
 
+  //GET, 이전 다음글 가져오기
+  prevNext: ( data ) => `${window._path || '/'}board/${data.board}/article/${data.articleId}/prevNext.json`,
+
+  //GET, 상단 공지 목록
+  noticeList: ( data ) => `${window._path || '/'}board/${data.board}/noticeArticle${( data.categoryId )? `?categoryId=${data.categoryId}`: ``}`,
+
+  //GET, 상단 공지 뷰페이지
+  noticeView: ( data ) => `${window._path || '/'}board/${data.board}/noticeArticle/${data.articleId}.json`,
+
   //POST, 스크랩 하기
   scrap: ( data ) => `${window._path || '/'}board/_my_/scrapArticle/${data.articleId}.json`,
 
@@ -94,14 +110,17 @@ let Config = {
   //GET, 스크랩 목록
   scrapList: ( data ) => `${window._path || '/'}board/_my_/scrapArticle.json`,
 
-  //GET, 이전 다음글 가져오기
-  prevNext: ( data ) => `${window._path || '/'}board/${data.board}/article/${data.articleId}/prevNext.json`,
+  //GET, 내가 작성한 글 리스트
+  myArticle: ( data ) => `${window._path || '/'}board/_my_/article.json`,
 
-  //GET, 상단 공지 목록
-  noticeList: ( data ) => `${window._path || '/'}board/${data.board}/noticeArticle${( data.categoryId )? `?categoryId=${data.categoryId}`: ``}`,
+  //GET, 내가 작성한 글 카운트
+  myArticleCount: ( data ) => `${window._path || '/'}board/_my_/article/search/totalCount.json`,
 
-  //GET, 상단 공지 뷰페이지
-  noticeView: ( data ) => `${window._path || '/'}board/${data.board}/noticeArticle/${data.articleId}.json`,
+  //GET, 내가 작성한 댓글 리스트
+  myComment: ( data ) => `${window._path || '/'}board/_my_/commentedArticle.json`,
+
+  //GET, 내가 작성한 댓글 카운트
+  myCommentCount: ( data ) => `${window._path || '/'}board/_my_/commentedArticle/search/totalCount.json`,
 
   //리스트 페이지 url
   listPage: 'list',
@@ -116,9 +135,12 @@ let Config = {
   apiError: ( data, loginPage ) => {
     if( data.status == '401' || data.exceptionClassName == 'AccessDeniedException' ){
       alert( L10N[ jQuery('html').attr('lang') || 'ko' ].alert_login );
-			if( loginPage )
-				location.href = loginPage + '?return_url=' + encodeURIComponent( location.href );
-      return;
+
+			window.GNBLogin && window.GNBLogin();
+
+			// if( loginPage )
+			// 	location.href = loginPage + '?return_url=' + encodeURIComponent( location.href );
+      // return;
     }
 
     if( data.status == '400' ){}

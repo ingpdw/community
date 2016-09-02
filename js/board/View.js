@@ -19,8 +19,17 @@ import PrevNextArticle from './PrevNextArticle';
 class View{
 	constructor( node, options ){
 		this.$node = node;
+
+		jQuery.extend( true, Config, options );
+
 		Config.board = ( options.board )? options.board: Config.board;
+
+		Config.isShare = ( options.isShare )? options.isShare: Config.isShare;
+
 		Config.share = ( options.share )? options.share: Config.share;
+
+		Config.isAdmin = ( options.isAdmin )?
+			options.isAdmin: false;
 
 		let param = Util.getParams();
 
@@ -56,13 +65,13 @@ class View{
 			//이전 다음
 			this.prevNextArticle = new PrevNextArticle( this.$node );
 
-			let tmp = Template.view( data );
+			let tmp = Template.view( data, Template );
 			//let prevNextTmp = this.prevNextArticle.setUI( data.prevNextArticleEntries );
 			//tmp = Tmpl.join( tmp, prevNextTmp );
 			this.$node.append( tmp );
 
 			//메뉴
-			this.viewMenu = new ViewMenu;
+			this.viewMenu = new ViewMenu( this.$node, this.isNotice );
 
 			//투표
 			this.vote = new Vote( this.guid );
@@ -82,7 +91,7 @@ class View{
 			//뷰어
 			this.Viewer = new Viewer();
 
-			if( Config.share && nc && nc.uikit && nc.uikit.ShareV2 ){
+			if( Config.isShare && Config.share && nc && nc.uikit && nc.uikit.ShareV2 ){
 				new nc.uikit.ShareV2({
 				  $parent: jQuery( '#ncShare' ),
 				  appid: Config.share.appid || '',
@@ -92,6 +101,8 @@ class View{
 				  breakpoint: Config.share.breakpoint || '',
 				  msg: Config.share.msg || '',
 				});
+			}else{
+				jQuery( '#ncShare' ).remove();
 			}
 
 

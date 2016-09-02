@@ -6,19 +6,20 @@ import Config from '../Config.js';
 import Util from '../Util.js';
 import Template from './Template.js';
 import Tmpl from 'js-template-string';
+import Observer from 'js-observer';
 
 class CommentReload{
-	constructor( $parent, callback ){
+	constructor( $parent ){
 		this.$parent = $parent;
 		this._id = this.$parent.attr( 'id' );
 		this.articleId = Util.getParams().articleId;
-		this.callback = callback;
 		this.addEvent();
+		this.onReload = new Observer();
   }
 
 	addEvent(){
 		jQuery( 'body' ).on( 'click', `#${this._id} .ncCommentCommonWrap .co-btn-reload`, ( evt ) => {
-			this.callback && this.callback();
+			this.onReload.emit();
 		});
 	}
 
