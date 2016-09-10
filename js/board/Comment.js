@@ -85,9 +85,16 @@ class Comment{
 
 	myLikeComment( data ){
 		if( !data || data.length == 0 ) return;
-		for( let item of data ){
+		// for( let item of data ){
+		// 	$( `#${this._id} button.co-btn-like[data-commentid=${item}]` ).addClass( 'is-active' );
+		// }
+
+		data.forEach( ( item ) =>  {
 			$( `#${this._id} button.co-btn-like[data-commentid=${item}]` ).addClass( 'is-active' );
-		}
+		});
+
+
+
 	}
 
   reloadComment(){

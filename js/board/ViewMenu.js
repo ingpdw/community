@@ -23,6 +23,14 @@ class ViewMenu{
 	}
 
 	addEvent(){
+
+		jQuery( 'body' ).on( 'click', ( evt ) => {
+			let container = jQuery( `#${this._id} .ncCommunityMoreButton` );
+			if (!container.is( evt.target ) && container.has( evt.target ).length === 0 ) {
+				container.removeClass( 'is-active' );
+			}
+		});
+
 		jQuery( 'body' ).on( 'click', `#${this._id} .ncCommunityMoreButton`, ( evt ) => {
 			evt.preventDefault();
 			let _$target = jQuery( evt.currentTarget );

@@ -63,7 +63,9 @@ class ListInfinite{
 		});
 
 		//menu Module
-		let listTopUtil = new ListTopUtil( this.$node, ( viewMode ) => {
+		let listTopUtil = new ListTopUtil( this.$node );
+
+		listTopUtil.onViewMode.add( ( viewMode ) => {
 			let pInfo = this.paramInfo;
 			pInfo.setParam( [ 'articleId', 0 ] );
 			if( viewMode == 'card' ){
@@ -73,7 +75,12 @@ class ListInfinite{
 			}
 
 			location.href = Config.listPage + '?' + pInfo.getParam();
-		});
+		}, this );
+
+		listTopUtil.onWrite.add( () => {
+			let pInfo = this.paramInfo;
+			location.href = Config.writePage + '?' + pInfo.getParam();
+		}, this );
 
 		this.loading = new Loading( this.$node );
 		this.loading.setUI();
@@ -101,7 +108,7 @@ class ListInfinite{
   }
 
 	setMoreButtonUI() {
-		return `<button class="ncCommmentMore">${Config.L10N.btn_more}</button>`;
+		return `<div class="wrap-community-more"><button class="ncCommmentMore">${Config.L10N.btn_more}</button></div>`;
 	}
 
 	removeMoreButton() {
@@ -192,6 +199,11 @@ class ListInfinite{
 			this.search.setSearchType( pInfo.getParamByKey( 'searchType' ) );
 
 			if( data && data.articleList.length == 0 ){
+
+				if( data.articleList.length == 0 && !this.isFirstLoaded ){
+					this.$node.append( Template.empty( this.listId, Config.L10N.list_none_article ) );
+					this.loading.hide();
+				}
 
 				if( !data.hasMore ){
 					this.infiniteScroll.stop( ( this.moreDirection == 'AFTER' )? 'up': 'down' );

@@ -19,7 +19,7 @@ class ParamInfo{
 
 		this.param = [];
 		for( let item in _param ){
-			this.param.push( [ item, _param[ item ] ] )
+			this.param.push( [ item, _param[ item ] || '' ] )
 		}
 	}
 
@@ -61,9 +61,15 @@ class ParamInfo{
 
 	getParam() {
 		let tmp = ``;
-		for( let item of this.param ){
+		// for( let item of this.param ){
+		// 	tmp += `&${ item[ 0 ] }=${ item[ 1 ] }`
+		// }
+
+		this.param.forEach( ( item )=>  {
 			tmp += `&${ item[ 0 ] }=${ item[ 1 ] }`
-		}
+		});
+
+
 		return tmp;
 	}
 };

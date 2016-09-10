@@ -9,15 +9,17 @@ import Template from './Template';
 import DropdownLayer from '../DropdownLayer';
 import PageNavigation from './PageNavigation';
 import Tmpl from 'js-template-string';
-
+import Observer from 'js-observer';
 
 class ListTopUtil{
-	constructor( node, callback ) {
+	constructor( node ) {
 		this.$node = node;
 		this._$node = jQuery( Template.listTop() );
 		this.setUI();
 		this.addEvent();
-		this.callback = callback;
+
+		this.onViewMode = new Observer;
+		this.onWrite = new Observer;
 
   }
 
@@ -32,19 +34,17 @@ class ListTopUtil{
 	addEvent() {
 		this.$node.on( 'click', '.btn-write', ( evt ) => {
 			evt.preventDefault();
-			location.href = Config.writePage;
+			this.onWrite.emit();
 		});
 
 		this.$node.on( 'click', '.btn-cards', ( evt ) => {
 			evt.preventDefault();
-			this.callback && this.callback( 'card' );
-
+			this.onViewMode.emit( 'card' );
 		});
 
 		this.$node.on( 'click', '.btn-list', ( evt ) => {
 			evt.preventDefault();
-			this.callback && this.callback( 'list' );
-
+			this.onViewMode.emit( 'list' );
 		});
 	}
 };

@@ -1,6 +1,9 @@
 /**
  * Connect
  */
+
+import Promise from 'promise-polyfill';
+
 'use strict';
 jQuery.support.cors = true;
 

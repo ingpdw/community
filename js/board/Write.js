@@ -5,17 +5,27 @@
 import Config from '../Config.js';
 import Util from '../Util.js';
 import DropdownLayer from '../DropdownLayer.js';
+import ParamInfo from './ParamInfo.js';
 import Template from './Template.js';
 import Tmpl from 'js-template-string';
 
 class Write{
 	constructor( $node, options ){
 		this.$node = $node;
+
+		this.isSubmit = false;
+
+		this.isReload = false;
+
 		this.articleId = Util.getParams().articleId;
 
 		jQuery.extend( true, Config, options );
 
 		Config.board = ( options.board )? options.board: Config.board;
+
+		Config.isImage = ( options.isImage )?
+			options.isImage: Config.isImage;
+
 		this.$node.append( this.template() );
 
 		//create Editor
@@ -23,6 +33,10 @@ class Write{
 
 		this.getCategory();
 		this.addEvent();
+
+		//parameter & hash Module - page, query, searchType, articleId
+		this.paramInfo = new ParamInfo();
+		this.paramInfo.setParamByUrl();
 
 		if( this.articleId ) this.update();
   }
@@ -48,56 +62,62 @@ class Write{
 
 			if( Config.guid == _uid ){
 				jQuery( '#title' ).val( _title );
-				_$contents = jQuery( '<div>' );
-				_$contents.append( _contents );
 
-				_$contents.find( '.fe-image-inner .fe-image' ).after( this.removeButtonUI() );
+				 _$contents = jQuery( '<div></div>' );
+				 _$contents.append( _contents );
+
+				 _$contents.find( '.fe-image-inner .fe-image' ).after( this.removeButtonUI() );
 
 				_$contents.find( '.fe-video .fe-video-inner iframe' ).after( this.removeButtonUI() );
 
-				_$contents = _$contents.clone().html();
+				_$contents.find( '.fe-video, .fe-image' ).addClass( 'fr-deletable' );
 
-				this.editor.insert( _$contents );
+				this.editor.insert( _$contents.html() );
 			}
 		});
 	}
 
 	setCategoryUI( data ){
 		let tmp = [];
-		for( let item of data ){
-			tmp.push({
-				'key': item.categoryId,
-				'value': item.categoryName
-			})
-		}
+		data.forEach( ( item )=>  {
+			if( item.activated ){
+				tmp.push({
+					'key': item.categoryId,
+					'value': item.categoryName
+				});
+				}
+			});
+
+		if( !tmp.length ) return;
 
 		let dropdownLayer = new DropdownLayer( jQuery( '.board-write-category' ), tmp, 'boardCategory' );
-		dropdownLayer.setValue( Util.getParams().categoryId|| '' );
+		dropdownLayer.setValue( Util.getParams().categoryId|| tmp[ 0 ].key );
 	}
 
 	getCategory(){
 		let _post = Util.get( Config.category( Config.board ), 'GET' );
 		_post.then( ( data ) => {
 			this.setCategoryUI( data );
-
 		}, ( data ) => {
 			Config.apiError( data );
 		});
 	}
 
   submit( data, callback ){
+
 		let _post = '';
 
 		if( !data.title ){
 			alert( Config.L10N.alert_empty_title );
+			this.enableWriteButton();
 			return;
 		}
 
 		if( !data.contents ){
 			alert( Config.L10N.alert_empty_contents );
+			this.enableWriteButton();
 			return;
 		}
-
 
 		_post = ( !this.articleId )?
 			Util.get( Config.write( Config.board ), 'POST', data ):
@@ -132,19 +152,51 @@ class Write{
 		return _image || _video || ``;
 	}
 
+	disableWriteButton () {
+		jQuery( '#boardWriteSubmit' ).attr( 'disabled', true );
+	}
+
+	enableWriteButton () {
+		jQuery( '#boardWriteSubmit' ).attr( 'disabled', false );
+	}
+
 	addEvent(){
+
+		jQuery( window ).on('beforeunload', () => {
+			if( this.isSubmit ){
+				return;
+			}else if( this.isReload ){
+				return;
+			}else{
+				return Config.L10N.alert_cancel_article;
+			}
+
+			return;
+		});
+
 		jQuery( 'body' ).on( 'click', '#boardWriteSubmit', ( evt ) => {
 			evt.preventDefault();
+
+			this.disableWriteButton();
+
 			let contents = this.editor.getSubmitContents();
 			let _title = jQuery( '#title' ).val();
 
 			if( _title.length < 2 ){
 				alert( Config.L10N.alert_too_short_title );
+				this.enableWriteButton();
 				return;
 			}
 
 			if( _title.length > 50 ){
 				alert( Config.L10N.alert_too_long_title );
+				this.enableWriteButton();
+				return;
+			}
+
+			if( Config.isImage && jQuery( contents ).find( '.fe-image' ).length == 0 ){
+				alert( Config.L10N.alert_empty_images );
+				this.enableWriteButton();
 				return;
 			}
 
@@ -157,19 +209,20 @@ class Write{
 			}
 
 			this.submit( data, ( data ) => {
-				location.href = Config.listPage;
+				this.isSubmit = true;
+				location.href = Config.listPage + '?' + this.paramInfo.getParam();
 			});
 		});
 
 		jQuery( 'body' ).on( 'click', '#boardWriteCancel', ( evt ) => {
 			evt.preventDefault();
-
-			Util.confirm( Config.L10N.alert_cancel_article, () => {
-				jQuery( '#title' ).val( '' );
-				this.reset();
-
-				location.href = Config.listPage;
-			}, () => {});
+			location.href = Config.listPage;
+			// Util.confirm( Config.L10N.alert_cancel_article, () => {
+			// 	jQuery( '#title' ).val( '' );
+			// 	this.reset();
+			//
+			// 	location.href = Config.listPage;
+			// }, () => {});
 		});
 	}
 

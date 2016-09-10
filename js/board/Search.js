@@ -26,12 +26,20 @@ class Search{
 			{categoryId: 'writer', categoryName: Config.L10N.search_searchtype_writer}
 		];
 
-		for( let item of searchTypes ){
+		//Symbol is not defined - babel is hell
+		// for( let item of searchTypes ){
+		// 	tmp.push({
+		// 		'key': item.categoryId,
+		// 		'value': item.categoryName
+		// 	})
+		// }
+
+		searchTypes.forEach( ( item )=>  {
 			tmp.push({
 				'key': item.categoryId,
 				'value': item.categoryName
-			})
-		}
+			});
+		});
 
 		this.dropdownLayer = new DropdownLayer( this.$parent, tmp, this._wrapId, 'board-search' );
 		this.dropdownLayer.addChange( ( data ) => {

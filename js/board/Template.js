@@ -51,7 +51,7 @@ module.exports = {
 		let _list = Template.iterate({
 			data: _data.articleList,
 			template: ( articleList ) => `
-				<li class="board-items" data-articleid="${articleList.articleId}">
+				<li class="board-items" data-articleid="${articleList.articleId}" data-is-summary="${( articleList.summary.length > 0 )? true: false}">
 				<div class="board-items-wrap">
 					<div class="board-items-contents">
 						${( articleList.thumbnailUrl )?
@@ -66,19 +66,22 @@ module.exports = {
 							<!--i class="fe-icon-new"></i-->
 						</div>
 						<div class="desc ${( articleList.thumbnailUrl )? '': 'desc-overflow'}">
-							<a href="${ articleList.url || `${Config.viewPage}?articleId=${articleList.articleId}` }">${articleList.summary || ''}</a>
+							<a href="${ articleList.url || `${Config.viewPage}?articleId=${articleList.articleId}` }">
+                ${ ( articleList.summary )? articleList.summary.replace( /\n/g, `<br/>`): '' }
+              </a>
 						</div>
 
 					</div>
 
 					<div class="board-items-footer">
 						<div class="info">
-							  <span class="writer">${articleList.writer.loginUser.name}</span>
+							  <span class="writer">${( articleList.writer.adminUser && articleList.writer.emoticonUrl)?
+                  `<img src="${articleList.writer.emoticonUrl}" alt=""/>`: articleList.writer.loginUser.name}</span>
 								<span class="date">${dateFormat.print( dateFormat.toGMTDate( articleList.updateDate ) )}</span>
 						</div>
 
 						<div class="count">
-							<span class="count-like" data-count="${articleList.goodCount}"><i class="fe-icon-like"></i><em>${articleList.goodCount}</em></span>
+							<span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
 							<span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment" ></i><em>${articleList.commentCount}</em></span>
 						</div>
 					</div>
@@ -104,13 +107,17 @@ module.exports = {
                 ${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
                 <!--i class="fe-icon-new"></i-->
                 <div class="count">
-                    <span class="count-like" data-count="${articleList.goodCount}"><i class="fe-icon-like"></i><em>${articleList.goodCount}</em></span>
+                	<!-- To do : RK 매거진에서만 적용
+                	<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>
+                	-->
+                    <span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
                     <span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment"></i><em>${articleList.commentCount}</em></span>
                 </div>
             </div>
 
             <div class="info">
-                <span class="writer">${articleList.writer.loginUser.name}</span>
+                <span class="writer">${( articleList.writer.adminUser && articleList.writer.emoticonUrl)?
+                  `<img src="${articleList.writer.emoticonUrl}" alt=""/>`: articleList.writer.loginUser.name}</span>
                 <span class="date">${dateFormat.print( dateFormat.toGMTDate( articleList.updateDate ) )}</span>
                 <span class="hit">${articleList.hitCount}</span>
             </div>
@@ -192,7 +199,7 @@ module.exports = {
 					<div class="comment-utils">
 						<button data-commentid="${_v.commentId}" class="co-btn co-btn-like">
 							<i class="fe-icon-like"></i>
-							<em class="text">${_v.goodCount}</em>
+							<em class="text">${( _v.goodCount >= 0 )? _v.goodCount: 0}</em>
 						</button>
 						<button class="co-btn co-btn-comments" data-commentid="${_v.commentId}">
 							<i class="fe-icon-comments"></i>
@@ -245,7 +252,7 @@ module.exports = {
 								<a href="#viewMoreList" class="co-btn co-btn-more"><i class="fe-icon-more"></i></a>
 								<ul id="viewMoreList" class="more-list">
 									<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>
-									${( Config.isAdmin )? ``: `<li class="more-items"><a href="#" class="co-btn co-btn-modify">${Config.L10N.more_modify}</a></li>`}
+									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-modify">${Config.L10N.more_modify}</button></li>`}
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>`}
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>`}
 								</ul>
@@ -259,7 +266,7 @@ module.exports = {
 					<div class="view-utils">
 						<button class="co-btn co-btn-like">
 							<i class="fe-icon-like"></i>
-							<em>${_article.goodCount}</em>
+							<em>${( _article.goodCount >= 0 )? _article.goodCount: 0}</em>
 						</button>
 						${( Config.share && Config.share.msg && nc && nc.uikit && nc.uikit.ShareV2 )? `<div id="ncShare" class="share"></div>` : ''}
 					</div>
@@ -272,7 +279,7 @@ module.exports = {
 	vote: ( data, goodCount ) => {
 		return `<div><span>${Config.L10N.recommend}</span><button id="voteButton">${Config.L10N.recommend}</button>
 				<span>${( data && data.voteType == 'FOR' )? `${Config.L10N.recommend}` : ''}</span>
-				<span id="goodCount">${( goodCount )? `${goodCount}`: 0 }</span>
+				<span id="goodCount">${( goodCount && goodCount >= 0 )? `${goodCount}`: 0 }</span>
 			</div>`;
 	},
 

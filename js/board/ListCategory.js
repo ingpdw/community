@@ -21,12 +21,23 @@ class ListCategory{
 
 	setCategoryUI( data ){
 		let tmp = [];
-		for( let item of data ){
-			tmp.push({
-				'key': item.categoryId,
-				'value': item.categoryName
-			})
-		}
+		// for( let item of data ){
+		// 	tmp.push({
+		// 		'key': item.categoryId,
+		// 		'value': item.categoryName
+		// 	})
+		// }
+
+		data.forEach( ( item )=>  {
+			if( item.activated ){
+				tmp.push({
+					'key': item.categoryId,
+					'value': item.categoryName
+				});
+			}
+		});
+
+		if( !tmp.length ) return;
 
 		this.dropdownLayer = new DropdownLayer( this.$parent, tmp, 'boardCategory' );
 		this.dropdownLayer.addChange( ( data ) => {
@@ -39,7 +50,9 @@ class ListCategory{
 	getCategory(){
 		let _post = Util.get( Config.category( Config.board ), 'GET' );
 		_post.then( ( data ) => {
-			this.setCategoryUI( data );
+
+			if( data && data.length > 1 )
+				this.setCategoryUI( data );
 
 		}, ( data ) => {
 			//Config.apiError( data );

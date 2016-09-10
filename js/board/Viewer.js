@@ -16,10 +16,16 @@ class Viewer{
 
   isEmoticonImage( src ){
     var emoticonUrl = [ '/emoticon', '/emo/' ];
-		for( let item of emoticonUrl ){
-      if( src.indexOf( emoticonUrl[ item ] ) !== -1 )
+		// for( let item of emoticonUrl ){
+    //   if( src.indexOf( emoticonUrl[ item ] ) !== -1 )
+		// 		return true;
+    // }
+
+		for( let item = 0, len = emoticonUrl.length; len > item; item++ ){
+			if( src.indexOf( emoticonUrl[ item ] ) !== -1 )
 				return true;
-    }
+		}
+
     return false;
   }
 

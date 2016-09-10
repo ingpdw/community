@@ -39,6 +39,10 @@ let Config = {
 
 	isShare: true,
 
+	isImage: false,
+
+	isMovie: false,
+
   listSize: 12,
 
   loginPage: 'http://op.mlogin.plaync.com/login/signin',

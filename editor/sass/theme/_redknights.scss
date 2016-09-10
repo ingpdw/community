@@ -1,0 +1,15 @@
+.fr-toolbar .fr-command {
+  &.fr-btn {
+    color: #5f6062;
+    
+    &:hover,
+    &:focus {
+    	color: #c69c7c;
+    	background: none;
+    }
+
+    &:active {
+    	background:rgba(153,153,153,0.10);
+    }
+  }
+}

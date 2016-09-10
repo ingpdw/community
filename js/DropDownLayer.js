@@ -42,7 +42,6 @@ class DropdownLayer{
 		});
 
 		//셀렉트메뉴 레이어: list 선택 시 title 변경
-
 		jQuery( 'body' ).on( 'click', dropdownLayerList, ( e ) => {
 
 			let $selectedDropdown = jQuery( dropdownLayerList ).parent( dropdownLayer );
@@ -65,6 +64,15 @@ class DropdownLayer{
 			let $eventTartget = jQuery( evt.target );
 			this.listValue = $eventTartget.val();
 			this.$callback.fire( this.listValue );
+		});
+
+		//if document is clicked, hide modalLayer;
+		jQuery( 'body' ).on( 'click' , ( evt ) => {
+	    let container = jQuery( this.dropDownLayer );
+	    if (!container.is( evt.target ) && container.has( evt.target ).length === 0 ) {
+				let $parent = jQuery( dropdownLayerTitle ).parent( dropdownLayer );
+	      $parent.removeClass( 'is-active' );
+	    }
 		});
 	}
 

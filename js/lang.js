@@ -556,7 +556,7 @@ module.exports = {
     'a_year_ago': 'a year ago',
     'years_ago': 'years ago'
   },
-  'zh-tw':{
+  'zh':{ //zh-tw
     // Buttons
     btn_signup: '회원가입',
     btn_login: '로그인',
