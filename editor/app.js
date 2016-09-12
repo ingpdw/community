@@ -7,7 +7,6 @@ import ImagePlugin from './plugin/Image.js';
 import YoutubeToolbar from './toolbar/YoutubeToolbar.js';
 import UploadImageToolbar from './toolbar/UploadImageToolbar.js';
 import RemovePlugin from './plugin/RemovePlugin.js';
-
 import Template from 'js-template-string';
 
 (function( $, window ){
@@ -50,8 +49,6 @@ import Template from 'js-template-string';
       //upload Image
       this.uploadImageToolbar = new UploadImageToolbar();
       this.uploadImageToolbar.onImage.add( ( item ) => {
-
-
         if( Config.maxImages <= jQuery( '.fe-image' ).length ){
           alert( Config.L10N.alert_valid_image_maximum );
           return;

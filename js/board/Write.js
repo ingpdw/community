@@ -13,6 +13,8 @@ class Write{
 	constructor( $node, options ){
 		this.$node = $node;
 
+		this.dropdownLayer = '';
+
 		this.isSubmit = false;
 
 		this.isReload = false;
@@ -90,8 +92,8 @@ class Write{
 
 		if( !tmp.length ) return;
 
-		let dropdownLayer = new DropdownLayer( jQuery( '.board-write-category' ), tmp, 'boardCategory' );
-		dropdownLayer.setValue( Util.getParams().categoryId|| tmp[ 0 ].key );
+		this.dropdownLayer = new DropdownLayer( jQuery( '.board-write-category' ), tmp, 'boardCategory' );
+		this.dropdownLayer.setValue( Util.getParams().categoryId|| tmp[ 0 ].key );
 	}
 
 	getCategory(){
@@ -153,11 +155,11 @@ class Write{
 	}
 
 	disableWriteButton () {
-		jQuery( '#boardWriteSubmit' ).attr( 'disabled', true );
+		jQuery( '.boardWriteSubmit' ).attr( 'disabled', true );
 	}
 
 	enableWriteButton () {
-		jQuery( '#boardWriteSubmit' ).attr( 'disabled', false );
+		jQuery( '.boardWriteSubmit' ).attr( 'disabled', false );
 	}
 
 	addEvent(){
@@ -174,7 +176,7 @@ class Write{
 			return;
 		});
 
-		jQuery( 'body' ).on( 'click', '#boardWriteSubmit', ( evt ) => {
+		jQuery( 'body' ).on( 'click', '.boardWriteSubmit', ( evt ) => {
 			evt.preventDefault();
 
 			this.disableWriteButton();
@@ -208,13 +210,17 @@ class Write{
 				thumbnail: this.getThumbnail()
 			}
 
+			if( this.dropdownLayer ){
+				data.categoryId = this.dropdownLayer.getValue();
+			}
+
 			this.submit( data, ( data ) => {
 				this.isSubmit = true;
 				location.href = Config.listPage + '?' + this.paramInfo.getParam();
 			});
 		});
 
-		jQuery( 'body' ).on( 'click', '#boardWriteCancel', ( evt ) => {
+		jQuery( 'body' ).on( 'click', '.boardWriteCancel', ( evt ) => {
 			evt.preventDefault();
 			location.href = Config.listPage;
 			// Util.confirm( Config.L10N.alert_cancel_article, () => {
@@ -231,8 +237,8 @@ class Write{
 		<form id="boardWriteForm" name="boardWriteForm" action="/board/${Config.board}/article" method="post" autocomplete="off" onSubmit="return false;">
 			<input type="hidden" name="articleId" id="articleId" value="${this.articleId}" />
 			<div class="co-btn-wrap">
-				<div class="left"><button id="boardWriteCancel" type="button" class="co-btn co-btn-write-cancel">${Config.L10N.btn_cancel}</button></div>
-				<div class="right"><button id="boardWriteSubmit" type="button" class="co-btn co-btn-write-submit">${Config.L10N.btn_confirm}</button></div>
+				<div class="left"><button type="button" class="boardWriteCancel co-btn co-btn-write-cancel">${Config.L10N.btn_cancel}</button></div>
+				<div class="right"><button type="button" class="boardWriteSubmit co-btn co-btn-write-submit">${Config.L10N.btn_confirm}</button></div>
 			</div>
 
 			<div class="board-write-category"></div>
@@ -242,6 +248,12 @@ class Write{
 			</div>
 
 			<div id="froala-editor"></div>
+
+			<div class="co-btn-wrap">
+				<div class="left"><button type="button" class="boardWriteCancel co-btn co-btn-write-cancel">${Config.L10N.btn_cancel}</button></div>
+				<div class="right"><button type="button" class="boardWriteSubmit co-btn co-btn-write-submit">${Config.L10N.btn_confirm}</button></div>
+			</div>
+			
 		</form>
 		</div>`;
 	}

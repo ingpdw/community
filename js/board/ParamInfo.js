@@ -69,6 +69,16 @@ class ParamInfo{
 			tmp += `&${ item[ 0 ] }=${ item[ 1 ] }`
 		});
 
+		return tmp;
+	}
+
+	getParamIgnore( ignore ) {
+		let tmp = ``;
+
+		this.param.forEach( ( item )=>  {
+			if( item[ 0 ] != ignore )
+				tmp += `&${ item[ 0 ] }=${ item[ 1 ] }`
+		});
 
 		return tmp;
 	}

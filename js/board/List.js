@@ -36,6 +36,9 @@ class List{
 		Config.isTopNotice = ( options && options.isTopNotice )?
 			options.isTopNotice: false;
 
+		Config.isListShare = ( options && options.isListShare )?
+			options.isListShare: false;
+
 		this.viewMode =  Util.getParams().viewMode|| 'list'; //[ list | card ]
 
 		//menu Module
@@ -71,6 +74,7 @@ class List{
 		let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
 		listCategory.onChange.add( ( data ) => {
 			let pInfo = this.paramInfo;
+			pInfo.setParam( [ 'categoryId', data ] );
 			location.href = Config.listPage + '?' + pInfo.getParam();
 		});
 

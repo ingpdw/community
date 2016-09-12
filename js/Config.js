@@ -43,6 +43,12 @@ let Config = {
 
 	isMovie: false,
 
+	isShowSignature: true,
+
+	isShowViewUtil: true,
+
+	isListShare: false,
+
   listSize: 12,
 
   loginPage: 'http://op.mlogin.plaync.com/login/signin',
@@ -138,16 +144,16 @@ let Config = {
   //API에러처리
   apiError: ( data, loginPage ) => {
     if( data.status == '401' || data.exceptionClassName == 'AccessDeniedException' ){
-      alert( L10N[ jQuery('html').attr('lang') || 'ko' ].alert_login );
+    		alert( L10N[ jQuery('html').attr('lang') || 'ko' ].alert_login );
+				window.GNBLogin && window.GNBLogin();
+		}
 
-			window.GNBLogin && window.GNBLogin();
-
-			// if( loginPage )
-			// 	location.href = loginPage + '?return_url=' + encodeURIComponent( location.href );
-      // return;
-    }
-
-    if( data.status == '400' ){}
+		if( data.status == '400' || data.exceptionClassName == 'AuthorizationException' ){
+			//alert( L10N[ jQuery('html').attr('lang') || 'ko' ].alert_login );
+		}
+		// if( loginPage )
+		// 	location.href = loginPage + '?return_url=' + encodeURIComponent( location.href );
+    // return;
   }
 }
 

@@ -2,55 +2,86 @@
  * UploadImageCallback
  */
 
-import Config from './Config.js';
 import Observer from 'js-observer';
 
 class UploadImageCallback {
   constructor( callback ) {
     this.actionUrl = '';
+    this._isUploading = false;
     this.callback = callback;
   }
   getActionUrl () {
-    return this.actionUrl;
+      return this.actionUrl;
   }
+
+  onReset(){
+    this._isUploading = false;
+  }
+
   setActionUrl ( url ) {
     this.actionUrl = url;
   }
+
+  isUploading(){
+    // if( !this._isUploading ){
+    //   this._isUploading = true;
+    //   return false;
+    // }else{
+    //   this.callback && this.callback( 'onValidUpload' );
+    //   this.onReset();
+    //   return true;
+    // }
+
+    return false;
+  }
+
   onSuccess () {
-    this.callback();
+    this.callback && this.callback();
+    this.onReset();
   }
   onFileServerError () {
-    return `${Config.L10N.error_file_server}`;
+    this.callback && this.callback( 'onFileServerError' );
+    this.onReset();
   }
   onExceedMaxUpload () {
-    return `${Config.L10N.error_exceed_max_upload}`;
+    this.callback && this.callback( 'onExceedMaxUpload' );
+    this.onReset();
   }
   onExceedFileSize () {
-    return `${Config.L10N.error_exceed_file_size}`;
+    this.callback && this.callback( 'onExceedFileSize' );
+    this.onReset();
   }
   onExceedFileSize3M () {
-    return `${Config.L10N.error_exceed_file_size_3m}`;
+    this.callback && this.callback( 'onExceedFileSize3M' );
+    this.onReset();
   }
   onInvalidRequest () {
-    return `${Config.L10N.error_invalid_request}`;
+    this.callback && this.callback( 'onInvalidRequest' );
+    this.onReset();
   }
   onInvalidChannel () {
-    return `${Config.L10N.error_invalid_channel}`;
+    this.callback && this.callback( 'onInvalidChannel' );
+    this.onReset();
   }
   onInvalidType () {
-    return `${Config.L10N.error_invalid_type}`;
+    this.callback && this.callback( 'onInvalidType' );
+    this.onReset();
   }
   onInvalidToken () {
-    return `${Config.L10N.error_invalid_token}`;
+    this.callback && this.callback( 'onInvalidToken' );
+    this.onReset();
   }
   onExpiredToken () {
-    return `${Config.L10N.error_expired_token}`;
+    this.callback && this.callback( 'onExpiredToken' );
+    this.onReset();
   }
   onExceedFile () {
-    return `${Config.L10N.error_exceed_file}`;
+    this.callback && this.callback( 'onExceedFile' );
+    this.onReset();
   }
   onAuthFail () {
-    return `${Config.L10N.error_auth_fail}`;
+    this.callback && this.callback( 'onAuthFail' );
+    this.onReset();
   }
 }
 

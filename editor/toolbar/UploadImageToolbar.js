@@ -14,11 +14,17 @@ class UploadImageToolbar extends Toolbar{
 		this.uploadUrl = '';
 		this.tokenId = '';
 		this.onImage = new Observer;
+		this.isUploading = false; //is uploading
 
-		window.uploadImageCallback = this.uploadImageCallback = new UploadImageCallback( () => {
+		window.uploadImageCallback = this.uploadImageCallback = new UploadImageCallback( ( err ) => {
+
+			if( err ){
+				this[err] && this[err]();
+				return;
+			}
+
 			let url = '';
 			//option에  token 정보가 있다면
-
 			if( Config.options &&  Config.options.fileInfoUrl ){
 				url = Config.options.fileInfoUrl;
 			}else{
@@ -64,6 +70,44 @@ class UploadImageToolbar extends Toolbar{
 		_post.then( ( data )=> {
 		}, () => {});
 	}
+
+	onValidUpload () {
+		alert( `${Config.L10N.alert_valid_upload}` );
+	}
+  onFileServerError () {
+    alert( `${Config.L10N.error_file_server}` );
+  }
+  onExceedMaxUpload () {
+    alert( `${Config.L10N.error_exceed_max_upload}` );
+  }
+  onExceedFileSize () {
+    alert( `${Config.L10N.error_exceed_file_size}` );
+  }
+  onExceedFileSize3M () {
+    alert( `${Config.L10N.error_exceed_file_size_3m}` );
+  }
+  onInvalidRequest () {
+    alert( `${Config.L10N.error_invalid_request}` );
+  }
+  onInvalidChannel () {
+    alert( `${Config.L10N.error_invalid_channel}` );
+  }
+  onInvalidType () {
+    alert( `${Config.L10N.error_invalid_type}` );
+  }
+  onInvalidToken () {
+    alert( `${Config.L10N.error_invalid_token}` );
+  }
+  onExpiredToken () {
+    alert( `${Config.L10N.error_expired_token}` );
+  }
+  onExceedFile () {
+    alert( `${Config.L10N.error_exceed_file}` );
+  }
+  onAuthFail () {
+    alert( `${Config.L10N.error_auth_fail}` );
+  }
+
 };
 
 module.exports = UploadImageToolbar;

@@ -70,7 +70,6 @@ module.exports = {
                 ${ ( articleList.summary )? articleList.summary.replace( /\n/g, `<br/>`): '' }
               </a>
 						</div>
-
 					</div>
 
 					<div class="board-items-footer">
@@ -81,6 +80,7 @@ module.exports = {
 						</div>
 
 						<div class="count">
+              ${ ( Config.isListShare )? `<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>`: ``}
 							<span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
 							<span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment" ></i><em>${articleList.commentCount}</em></span>
 						</div>
@@ -92,7 +92,7 @@ module.exports = {
 
 		return Template.render({
 			data: _list,
-			template: ( list ) => `<ul class="${_id} board-list-card">${list}</ul>` //board-list-event
+			template: ( list ) => `<ul class="${_id} board-list-card">${list}</ul>`
 		});
 
 	},
@@ -107,9 +107,7 @@ module.exports = {
                 ${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
                 <!--i class="fe-icon-new"></i-->
                 <div class="count">
-                	<!-- To do : RK 매거진에서만 적용
-                	<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>
-                	-->
+                	  ${ ( Config.isListShare )? `<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>`: ``}
                     <span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
                     <span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment"></i><em>${articleList.commentCount}</em></span>
                 </div>
@@ -129,6 +127,10 @@ module.exports = {
 			template: ( list ) => `<ul class="${_id} board-list-default">${list}</ul>`
 		});
 	},
+
+  listShare: () => {
+    return `<div id="ncShare"></div>`;
+  },
 
 	prevNext: ( _data ) => {
     let _next = _data.nextArticle || ``;
@@ -234,7 +236,7 @@ module.exports = {
     });
   },
 
-  view: ( _data, _template ) => {
+  view: ( _data, _template, isNotice ) => {
 		return Template.render({
 			data: _data,
 			template: ( _v, _article = _v.article ) => `
@@ -243,12 +245,14 @@ module.exports = {
 						<h2 class="view-title">${_article.title}</h2>
 
 						<div class="view-info">
-							<span class="writer">${_article.writer.loginUser.name}</span>
+              <span class="writer">${( _article.writer.adminUser && _article.writer.emoticonUrl)?
+                `<img src="${_article.writer.emoticonUrl}" alt=""/>`: _article.writer.loginUser.name}</span>
 							<span class="date">${dateFormat.print( dateFormat.toGMTDate( _article.updateDate ) )}</span>
 							<span class="hit">조회<em>${_article.hitCount}</em></span>
 							<span class="comment">댓글<em>${_article.commentCount}</em></span>
 
-							<div class="ncCommunityMoreButton more">
+              ${( Config.isShowViewUtil )?
+							`<div class="ncCommunityMoreButton more">
 								<a href="#viewMoreList" class="co-btn co-btn-more"><i class="fe-icon-more"></i></a>
 								<ul id="viewMoreList" class="more-list">
 									<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>
@@ -256,7 +260,7 @@ module.exports = {
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>`}
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>`}
 								</ul>
-							</div>
+							</div>`: ``}
 						</div>
 					</div>
 					<div class="view-body">
@@ -264,14 +268,15 @@ module.exports = {
 					</div>
 
 					<div class="view-utils">
-						<button class="co-btn co-btn-like">
+            ${ ( !isNotice )?
+						`<button class="co-btn co-btn-like">
 							<i class="fe-icon-like"></i>
 							<em>${( _article.goodCount >= 0 )? _article.goodCount: 0}</em>
-						</button>
+						</button>`: ``}
 						${( Config.share && Config.share.msg && nc && nc.uikit && nc.uikit.ShareV2 )? `<div id="ncShare" class="share"></div>` : ''}
 					</div>
 
-          ${ ( Config.isAdmin || _article.writer.adminUser )? ``: _template.viewSignature( _data ) }
+          ${ ( Config.isAdmin || _article.writer.adminUser && !Config.isShowSignature )? ``: _template.viewSignature( _data ) }
 				</section>`
 		});
 	},

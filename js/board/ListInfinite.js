@@ -13,8 +13,10 @@ import DropdownLayer from '../DropdownLayer';
 import PageNavigation from './PageNavigation';
 import PrevNextArticle from './PrevNextArticle';
 import ListTopUtil from './ListTopUtil';
+import ListCategory from './ListCategory';
 import ParamInfo from './ParamInfo';
 import NoticeList from './NoticeList';
+import ListShare from './ListShare';
 import Tmpl from 'js-template-string';
 import InfiniteScroll from '../InfiniteScroll.js';
 
@@ -49,6 +51,9 @@ class ListInfinite{
 
 		Config.isTopNotice = ( options && options.isTopNotice )?
 			options.isTopNotice: false;
+
+		Config.isListShare = ( options && options.isListShare )?
+			options.isListShare: false;
 
 		Config.listViewMode = ( Config.isCardView )? 'card': 'list';
 
@@ -88,6 +93,13 @@ class ListInfinite{
 		//pagenavigation Module
 		this.pageNavigation = new PageNavigation( this.paramInfo );
 
+		let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
+		listCategory.onChange.add( ( data ) => {
+			let pInfo = this.paramInfo;
+			pInfo.setParam( [ 'categoryId', data ] );
+			location.href = Config.listPage + '?' + pInfo.getParam();
+		});
+
 		//board search Module
 		this.search = new Search( listTopUtil.getNode(), ( query = '', searchType = '' ) => {
 			let pInfo = this.paramInfo;
@@ -102,6 +114,12 @@ class ListInfinite{
 		if( Config.isTopNotice ){
 			let noticeList = new NoticeList( this.$node );
 			noticeList.get();
+		}
+
+		if( Config.isListShare ){
+			let listShare = jQuery( Template.listShare() );
+			this.$node.append( listShare );
+			this.listShare = new ListShare( listShare, Config.share );
 		}
 
 		this.addEvent();

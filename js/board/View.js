@@ -31,6 +31,12 @@ class View{
 		Config.isAdmin = ( options.isAdmin )?
 			options.isAdmin: false;
 
+		Config.isShowSignature = ( options.isShowSignature )?
+			options.isShowSignature: Config.isShowSignature;
+
+		Config.isShowViewUtil = ( options.isShowViewUtil )?
+			options.isShowViewUtil: Config.isShowViewUtil;
+
 		let param = Util.getParams();
 
 		this.articleId = param.articleId;
@@ -65,7 +71,7 @@ class View{
 			//이전 다음
 			this.prevNextArticle = new PrevNextArticle( this.$node );
 
-			let tmp = Template.view( data, Template );
+			let tmp = Template.view( data, Template, this.isNotice );
 			//let prevNextTmp = this.prevNextArticle.setUI( data.prevNextArticleEntries );
 			//tmp = Tmpl.join( tmp, prevNextTmp );
 			this.$node.append( tmp );
@@ -104,7 +110,6 @@ class View{
 			}else{
 				jQuery( '#ncShare' ).remove();
 			}
-
 
 			this.loading.hide();
 

@@ -22,7 +22,7 @@ class PageNavigation{
 		let tmp = Tmpl.iterate({
 			data: _page.pageList,
 			template: ( _v ) => `
-				${ (_v == _cur )? `<li class="current">${_v}</li>`: `<li><a href="${Config.listPage}?page=${_v}${this.paramInfo.getParam()}">${_v}</a></li>`}
+				${ (_v == _cur )? `<li class="current">${_v}</li>`: `<li><a href="${Config.listPage}?page=${_v}${this.paramInfo.getParamIgnore( 'page' )}">${_v}</a></li>`}
 			`
 		});
 
@@ -32,9 +32,9 @@ class PageNavigation{
 			template: ( _v ) => `
 				<div class="pagination-container">
 					<ul class="pagination-list">
-						${ ( _v.prev )? `<li class="prev"><a href="${Config.listPage}?page=${_v.prev}${this.paramInfo.getParam()}"><i class="fe-icon-chevron_left"></i></a></li>`: ``}
+						${ ( _v.prev )? `<li class="prev"><a href="${Config.listPage}?page=${_v.prev}${this.paramInfo.getParamIgnore( 'page' )}"><i class="fe-icon-chevron_left"></i></a></li>`: ``}
 						${_v.page}
-						${ (_v.next != _end )? `<li class="next"><a href="${Config.listPage}?page=${_v.next}${this.paramInfo.getParam()}"><i class="fe-icon-chevron_right"></i></a></li>`: ``}
+						${ (_v.next != _end )? `<li class="next"><a href="${Config.listPage}?page=${_v.next}${this.paramInfo.getParamIgnore( 'page' )}"><i class="fe-icon-chevron_right"></i></a></li>`: ``}
 					</ul>
 				</div>
 			`
