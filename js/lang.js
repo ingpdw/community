@@ -114,6 +114,7 @@ module.exports = {
     editor_upload_movie: '동영상',
 
     // alert
+    alert_valid_upload: '현재 진행 중인 작업이 있습니다.\n잠시만 기다려 주세요.',
     alert_delete_article: '삭제 하시겠습니까?',
     alert_cancel_article: '글쓰기를 취소하시겠습니까?',
     alert_empty_title: '제목을 입력해 주세요. ',
@@ -296,6 +297,7 @@ module.exports = {
     editor_upload_movie: '동영상',
 
     // alert
+    alert_valid_upload: '현재 진행 중인 작업이 있습니다.\n잠시만 기다려 주세요.',
     alert_delete_article: '삭제 하시겠습니까?',
     alert_cancel_article: '글쓰기를 취소하시겠습니까?',
     alert_empty_title: '제목을 입력해 주세요. ',
@@ -483,6 +485,7 @@ module.exports = {
     editor_upload_movie: '동영상',
 
     // alert
+    alert_valid_upload: '현재 진행 중인 작업이 있습니다.\n잠시만 기다려 주세요.',
     alert_delete_article: '삭제 하시겠습니까?',
     alert_cancel_article: '글쓰기를 취소하시겠습니까?',
     alert_empty_title: '제목을 입력해 주세요. ',
@@ -670,6 +673,7 @@ module.exports = {
     editor_upload_movie: '동영상',
 
     // alert
+    alert_valid_upload: '현재 진행 중인 작업이 있습니다.\n잠시만 기다려 주세요.',
     alert_delete_article: '삭제 하시겠습니까?',
     alert_cancel_article: '글쓰기를 취소하시겠습니까?',
     alert_empty_title: '제목을 입력해 주세요. ',

@@ -276,7 +276,7 @@ module.exports = {
 						${( Config.share && Config.share.msg && nc && nc.uikit && nc.uikit.ShareV2 )? `<div id="ncShare" class="share"></div>` : ''}
 					</div>
 
-          ${ ( Config.isAdmin || _article.writer.adminUser && !Config.isShowSignature )? ``: _template.viewSignature( _data ) }
+          ${ ( Config.isAdmin || _article.writer.adminUser || !Config.isShowSignature )? ``: _template.viewSignature( _data ) }
 				</section>`
 		});
 	},

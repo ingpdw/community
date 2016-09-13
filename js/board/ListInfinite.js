@@ -93,12 +93,12 @@ class ListInfinite{
 		//pagenavigation Module
 		this.pageNavigation = new PageNavigation( this.paramInfo );
 
-		let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
-		listCategory.onChange.add( ( data ) => {
-			let pInfo = this.paramInfo;
-			pInfo.setParam( [ 'categoryId', data ] );
-			location.href = Config.listPage + '?' + pInfo.getParam();
-		});
+		// let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
+		// listCategory.onChange.add( ( data ) => {
+		// 	let pInfo = this.paramInfo;
+		// 	pInfo.setParam( [ 'categoryId', data ] );
+		// 	location.href = Config.listPage + '?' + pInfo.getParam();
+		// });
 
 		//board search Module
 		this.search = new Search( listTopUtil.getNode(), ( query = '', searchType = '' ) => {

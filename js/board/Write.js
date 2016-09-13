@@ -184,6 +184,11 @@ class Write{
 			let contents = this.editor.getSubmitContents();
 			let _title = jQuery( '#title' ).val();
 
+			if( this.editor.isImageUploading() ){
+				alert( Config.L10N.alert_valid_upload );
+				return;
+			}
+
 			if( _title.length < 2 ){
 				alert( Config.L10N.alert_too_short_title );
 				this.enableWriteButton();
@@ -253,7 +258,7 @@ class Write{
 				<div class="left"><button type="button" class="boardWriteCancel co-btn co-btn-write-cancel">${Config.L10N.btn_cancel}</button></div>
 				<div class="right"><button type="button" class="boardWriteSubmit co-btn co-btn-write-submit">${Config.L10N.btn_confirm}</button></div>
 			</div>
-			
+
 		</form>
 		</div>`;
 	}

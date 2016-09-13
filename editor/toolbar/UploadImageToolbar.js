@@ -14,12 +14,14 @@ class UploadImageToolbar extends Toolbar{
 		this.uploadUrl = '';
 		this.tokenId = '';
 		this.onImage = new Observer;
+		this.onUploading = new Observer;
 		this.isUploading = false; //is uploading
 
-		window.uploadImageCallback = this.uploadImageCallback = new UploadImageCallback( ( err ) => {
-
+		window.uploadImageCallback = this.uploadImageCallback = new UploadImageCallback();
+		this.uploadImageCallback.onUploaded.add( ( err ) => {
 			if( err ){
-				this[err] && this[err]();
+				this[ err ] && this[ err ]();
+				this.onImage.emit( 'error' );
 				return;
 			}
 
@@ -31,7 +33,7 @@ class UploadImageToolbar extends Toolbar{
 				url = Config.getTokenFileInfo({ board: Config.board, tokenId: this.tokenId });
 			}
 			let _post = Util.get( url, 'GET' );
-			_post.then( ( data )=> {
+			_post.then( ( data ) => {
 				let item = data[ data.length - 1 ];
 				this.onImage.emit( item );
 			}, ( data ) => {
@@ -39,7 +41,11 @@ class UploadImageToolbar extends Toolbar{
 						alert( data.result.message );
 				}
 			});
-		});
+		}, this);
+
+		this.uploadImageCallback.onUploading.add( () => {
+			this.onUploading.emit();
+		}, this);
 	}
 
 	//option에 token 정보가 있다면

@@ -42,7 +42,7 @@ class List{
 		this.viewMode =  Util.getParams().viewMode|| 'list'; //[ list | card ]
 
 		//menu Module
-		let listTopUtil = new ListTopUtil( this.$node );
+		let listTopUtil = this.listTopUtil = new ListTopUtil( this.$node );
 
 		listTopUtil.onViewMode.add( ( viewMode ) => {
 			let pInfo = this.paramInfo;
@@ -71,13 +71,6 @@ class List{
 		//pagenavigation Module
 		this.pageNavigation = new PageNavigation( this.paramInfo );
 
-		let listCategory = new ListCategory( listTopUtil.getNode(), Util.getParams().categoryId || '' );
-		listCategory.onChange.add( ( data ) => {
-			let pInfo = this.paramInfo;
-			pInfo.setParam( [ 'categoryId', data ] );
-			location.href = Config.listPage + '?' + pInfo.getParam();
-		});
-
 		//board search Module
 		this.search = new Search( listTopUtil.getNode(), ( query = '', searchType = '' ) => {
 			let pInfo = this.paramInfo;
@@ -96,6 +89,22 @@ class List{
 	}
 
   get(){
+		if( Config.isCategory ){
+			let listCategory = new ListCategory( this.listTopUtil.getNode(), Util.getParams().categoryId || '', true );
+			listCategory.onChange.add( ( data ) => {
+				let pInfo = this.paramInfo;
+				pInfo.setParam( [ 'categoryId', data ] );
+				location.href = Config.listPage + '?' + pInfo.getParam();
+			});
+			listCategory.onInit.add( ( categoryId ) => {
+				this.getList( categoryId );
+			});
+		}else{
+			this.getList();
+		}
+  }
+
+	getList( categoryId ) {
 		let _param = Util.getParams();
 		let page = _param.page || 1;
 		let pInfo = this.paramInfo;
@@ -111,11 +120,11 @@ class List{
 			page: page,
 			query: decodeURIComponent( pInfo.getParamByKey( 'query' ) ),
 			searchType: pInfo.getParamByKey( 'searchType' ),
-			categoryId: pInfo.getParamByKey( 'categoryId' ),
+			categoryId: pInfo.getParamByKey( 'categoryId' ) || categoryId,
 			summary: ( pInfo.getParamByKey( 'viewMode' ) == 'card' )? true: false
 		});
 
-    list.then( ( data ) => {
+		list.then( ( data ) => {
 			let tmp = '';
 
 			//empty listNode
@@ -147,8 +156,8 @@ class List{
 				this.isFirstLoaded = true;
 			}
 
-    }, () => {})
-  }
+		}, () => {})
+	}
 
 };
 

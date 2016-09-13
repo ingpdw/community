@@ -8,10 +8,13 @@ import Util from '../Util';
 import Observer from 'js-observer';
 
 class ListCategory{
-	constructor( $parent, value ) {
+	constructor( $parent, value, isSetDefault ) {
 		this.$parent = $parent;
 		this.value = value;
+		this.isSetDefault = isSetDefault;
 		this.onChange = new Observer;
+		this.onInit = new Observer;
+
 		this.getCategory();
 	}
 
@@ -45,6 +48,13 @@ class ListCategory{
 		});
 
 		if( this.value ) this.setValue( this.value );
+
+		if( this.isSetDefault ){
+			this.setValue( tmp[ 0 ].key );
+			this.onInit.emit( tmp[ 0 ].key );
+		}
+
+
 	}
 
 	getCategory(){
@@ -55,6 +65,7 @@ class ListCategory{
 				this.setCategoryUI( data );
 
 		}, ( data ) => {
+			this.onChange.emit( '' );
 			//Config.apiError( data );
 		});
 	}

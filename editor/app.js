@@ -14,20 +14,24 @@ import Template from 'js-template-string';
 
   class app {
     constructor ( $node, board = 'free', options ) {
+
+      //private
+      let editor, youtubePlugin, removePlugin, imagePlugin, youtubeToolbar;
+
       Config.board = board;
+
       Config.options = options; //{toolbar: [], imageUploadFrameUrl: ''}
+
       Config.maxImages = ( options && options.maxImages )?
         options.maxImages: Config.maxImages;
 
-      //Editor
-      let editor, youtubePlugin, removePlugin, imagePlugin, youtubeToolbar;
-
       this.editor = editor = new Editor( $node );
+
       this.editor.onYoutube.add( () => {
         youtubeToolbar.show();
       }, this );
-      this.editor.onImage.add( () => {
-      }, this );
+
+      this.editor.onImage.add( () => {}, this );
 
       //youtube template
       youtubePlugin = new YoutubePlugin();
@@ -49,6 +53,11 @@ import Template from 'js-template-string';
       //upload Image
       this.uploadImageToolbar = new UploadImageToolbar();
       this.uploadImageToolbar.onImage.add( ( item ) => {
+        jQuery( '[data-cmd=insertImage]' ).removeClass( 'fr-btn-disabled' );
+        if( item === 'error' ){
+          return;
+        }
+
         if( Config.maxImages <= jQuery( '.fe-image' ).length ){
           alert( Config.L10N.alert_valid_image_maximum );
           return;
@@ -58,13 +67,30 @@ import Template from 'js-template-string';
         this.insert( tmp );
       });
 
+      this.uploadImageToolbar.onUploading.add( () => {
+        jQuery( '[data-cmd=insertImage]' ).addClass( 'fr-btn-disabled' );
+      }, this );
+
       ( Config.options && Config.options.fileInfoUrl && Config.options.uploadUrl )?
         this.uploadImageToolbar.getTokenByOption( () => {}):
         this.uploadImageToolbar.getToken( () => {});
+
+      this.addEvent();
     }
 
-    insert( dom ){
+    addEvent() {
+      jQuery( '.fe-icon-photo' ).on( 'click',  ( evt ) =>{
+        alert( Config.L10N.alert_valid_upload );
+      });
+    }
+
+    insert( dom ) {
       this.editor.insertNode( dom );
+    }
+
+    isImageUploading() {
+      return ( jQuery( '[data-cmd=insertImage]' ).hasClass( 'fr-btn-disabled' ) )?
+        true: false;
     }
 
     getSubmitContents( txt ) {

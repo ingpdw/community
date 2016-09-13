@@ -74,39 +74,39 @@ class Editor{
 		this.submit = new Submit();
 	}
 
-	getSubmitContents(){
+	getSubmitContents() {
 		return this.submit.beforeSubmit( this.getCode() );
 	}
 
-	cursorDel(){
+	cursorDel() {
 		this.$node.froalaEditor( 'cursor.del' );
 	}
 
-	setState( state ){
+	setState( state ) {
 		this.state = state;
 	}
 
-	restore(){
+	restore() {
 		this.$node.froalaEditor( 'selection.restore' );
 	}
 
-	saveCursor(){
+	saveCursor() {
 		this.$node.froalaEditor( 'selection.save' );
 	}
 
-	insert( dom ){
+	insert( dom ) {
 		this.restore();
 		this.$node.froalaEditor( 'html.insert', dom, false );
 		this.state = 'pluginInsert';
 	}
 
-	insertNode( dom ){
+	insertNode( dom ) {
 		this.restore();
 		this.$node.froalaEditor( 'html.insert', dom, false );
 		this.state = 'userInsert';
 	}
 
-	reset(){
+	reset() {
 		this.$node.froalaEditor('html.set', '<div></div>' );
 	}
 
@@ -114,19 +114,23 @@ class Editor{
 		return this.$node;
 	}
 
-	focus(){
+	enter() {
+		this.$node.froalaEditor( 'cursor.enter', true );
+	}
+
+	focus() {
 		this.$node.froalaEditor( 'events.focus' );
 	}
 
-	setFocusAtEnd( node ){
+	setFocusAtEnd( node ) {
 		this.$node.froalaEditor( 'selection.setAtEnd', node );
 	}
 
-	setEndElement( node ){
+	setEndElement( node ) {
 		this.$node.froalaEditor( 'selection.endElement' );
 	}
 
-	getCode(){
+	getCode() {
 		return this.$node.froalaEditor( 'html.get' );
 	}
 	//@Test

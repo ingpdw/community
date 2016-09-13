@@ -9,6 +9,10 @@ class UploadImageCallback {
     this.actionUrl = '';
     this._isUploading = false;
     this.callback = callback;
+
+    this.onUploaded = new Observer;
+
+    this.onUploading = new Observer;
   }
   getActionUrl () {
       return this.actionUrl;
@@ -27,60 +31,61 @@ class UploadImageCallback {
     //   this._isUploading = true;
     //   return false;
     // }else{
-    //   this.callback && this.callback( 'onValidUpload' );
+    //   this.onUploaded.emit( 'onValidUpload' );
     //   this.onReset();
     //   return true;
     // }
 
+    this.onUploading.emit();
     return false;
   }
 
   onSuccess () {
-    this.callback && this.callback();
+    this.onUploaded.emit();
     this.onReset();
   }
   onFileServerError () {
-    this.callback && this.callback( 'onFileServerError' );
+    this.onUploaded.emit( 'onFileServerError' );
     this.onReset();
   }
   onExceedMaxUpload () {
-    this.callback && this.callback( 'onExceedMaxUpload' );
+    this.onUploaded.emit( 'onExceedMaxUpload' );
     this.onReset();
   }
   onExceedFileSize () {
-    this.callback && this.callback( 'onExceedFileSize' );
+    this.onUploaded.emit( 'onExceedFileSize' );
     this.onReset();
   }
   onExceedFileSize3M () {
-    this.callback && this.callback( 'onExceedFileSize3M' );
+    this.onUploaded.emit( 'onExceedFileSize3M' );
     this.onReset();
   }
   onInvalidRequest () {
-    this.callback && this.callback( 'onInvalidRequest' );
+    this.onUploaded.emit( 'onInvalidRequest' );
     this.onReset();
   }
   onInvalidChannel () {
-    this.callback && this.callback( 'onInvalidChannel' );
+    this.onUploaded.emit( 'onInvalidChannel' );
     this.onReset();
   }
   onInvalidType () {
-    this.callback && this.callback( 'onInvalidType' );
+    this.onUploaded.emit( 'onInvalidType' );
     this.onReset();
   }
   onInvalidToken () {
-    this.callback && this.callback( 'onInvalidToken' );
+    this.onUploaded.emit( 'onInvalidToken' );
     this.onReset();
   }
   onExpiredToken () {
-    this.callback && this.callback( 'onExpiredToken' );
+    this.onUploaded.emit( 'onExpiredToken' );
     this.onReset();
   }
   onExceedFile () {
-    this.callback && this.callback( 'onExceedFile' );
+    this.onUploaded.emit( 'onExceedFile' );
     this.onReset();
   }
   onAuthFail () {
-    this.callback && this.callback( 'onAuthFail' );
+    this.onUploaded.emit( 'onAuthFail' );
     this.onReset();
   }
 }
