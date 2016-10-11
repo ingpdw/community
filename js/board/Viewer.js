@@ -7,10 +7,9 @@ import Util from '../Util';
 import Template from './Template';
 import Tmpl from 'js-template-string';
 
-
 class Viewer{
 	constructor(){
-		if( nc && nc.ui && nc.ui.ImageViewer )
+		if( window.nc && window.nc.ui && window.nc.ui.ImageViewer )
 			this.addEvent();
   }
 
@@ -50,7 +49,8 @@ class Viewer{
 					if( !this.isEmoticonImage( _src ) ) arr.push( _src );
 				});
 
-				this.mobileImageViewer = new nc.ui.ImageViewer( jQuery( 'body' ), arr, {commentUrl: ''} );
+				if( window.nc && window.nc.ui && window.nc.ui.ImageViewer )
+					this.mobileImageViewer = new nc.ui.ImageViewer( jQuery( 'body' ), arr, {commentUrl: ''} );
 		}
 
 		src = this.replaceOrigin( src );
@@ -63,8 +63,6 @@ class Viewer{
 	    this.popView( jQuery( evt.currentTarget ).attr( 'src' ) );
 	  });
   }
-
-
 };
 
 module.exports = Viewer;

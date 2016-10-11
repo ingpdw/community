@@ -3,7 +3,7 @@ import Util from '../Util.js';
 import Template from 'js-template-string';
 import DateFormat from 'date-format-simple';
 
-let dateFormat = new DateFormat( window.today || new Date, {
+let dateFormat = new DateFormat( Config.now, {
   'a_few_seconds_ago': Config.L10N.a_few_seconds_ago,
   'seconds_ago': Config.L10N.seconds_ago,
   'a_minute_ago': Config.L10N.a_minute_ago,
@@ -15,8 +15,8 @@ let dateFormat = new DateFormat( window.today || new Date, {
   'a_month_ago': Config.L10N.a_month_ago,
   'months_ago': Config.L10N.months_ago,
   'a_year_ago': Config.L10N.a_year_ago,
-  'years_ago': Config.L10N.years_ago,
-});
+  'years_ago': Config.L10N.years_ago
+}, true);
 
 module.exports = {
 	listTop: () => {
@@ -63,7 +63,9 @@ module.exports = {
 							<!--span class="category">${articleList.category.categoryName}</span-->
 						  <a href="${ articleList.url || `${Config.viewPage}?articleId=${articleList.articleId}` }">${articleList.title}</a>
 							${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
-							<!--i class="fe-icon-new"></i-->
+
+              ${ ( Util.diffDate( dateFormat.toGMTDate( articleList.postDate ), dateFormat.getNow() ) <= 3600000 * 24 )?
+                `<i class="fe-icon-new" data-diff=""></i>`: ``}
 						</div>
 						<div class="desc ${( articleList.thumbnailUrl )? '': 'desc-overflow'}">
 							<a href="${ articleList.url || `${Config.viewPage}?articleId=${articleList.articleId}` }">
@@ -76,13 +78,19 @@ module.exports = {
 						<div class="info">
 							  <span class="writer">${( articleList.writer.adminUser && articleList.writer.emoticonUrl)?
                   `<img src="${articleList.writer.emoticonUrl}" alt=""/>`: articleList.writer.loginUser.name}</span>
-								<span class="date">${dateFormat.print( dateFormat.toGMTDate( articleList.updateDate ) )}</span>
+								<span class="date">${dateFormat.printUntil( articleList.postDate, 'month', true )}</span>
 						</div>
 
 						<div class="count">
               ${ ( Config.isListShare )? `<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>`: ``}
-							<span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
-							<span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment" ></i><em>${articleList.commentCount}</em></span>
+							<span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}">
+                <i class="fe-icon-like"></i>
+                <em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em>
+              </span>
+							<span class="count-comment" data-count="${articleList.commentCount}">
+                <i class="fe-icon-comment" ></i>
+                <em>${articleList.commentCount}</em>
+              </span>
 						</div>
 					</div>
 				</div>
@@ -105,18 +113,29 @@ module.exports = {
                 <!--span class="category">${articleList.category.categoryName}</span-->
                 <a href="${Config.viewPage}?articleId=${articleList.articleId}${param}">${articleList.title}</a>
                 ${( articleList.hasThumbnail )? `<i class="fe-icon-picture"></i>`: `` }
-                <!--i class="fe-icon-new"></i-->
+
+                ${ ( Util.diffDate( dateFormat.toGMTDate( articleList.postDate ), dateFormat.getNow()  ) <= 3600000 * 24 )?
+                  `<i class="fe-icon-new" data-diff=""></i>`: ``}
+
                 <div class="count">
                 	  ${ ( Config.isListShare )? `<button class="co-btn co-btn-share"><i class="fe-icon-share"></i></button>`: ``}
-                    <span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}"><i class="fe-icon-like"></i><em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em></span>
-                    <span class="count-comment" data-count="${articleList.commentCount}"><i class="fe-icon-comment"></i><em>${articleList.commentCount}</em></span>
+                    <span class="count-like" data-count="${( articleList.goodCount >= 0 )? articleList.goodCount: 0}">
+                      <i class="fe-icon-like"></i>
+                      <em>${( articleList.goodCount >= 0 )? articleList.goodCount: 0}</em>
+                    </span>
+                    <span class="count-comment" data-count="${articleList.commentCount}">
+                      <i class="fe-icon-comment"></i>
+                      <em>${articleList.commentCount}</em>
+                    </span>
                 </div>
             </div>
 
             <div class="info">
                 <span class="writer">${( articleList.writer.adminUser && articleList.writer.emoticonUrl)?
                   `<img src="${articleList.writer.emoticonUrl}" alt=""/>`: articleList.writer.loginUser.name}</span>
-                <span class="date">${dateFormat.print( dateFormat.toGMTDate( articleList.updateDate ) )}</span>
+                <span class="date">${dateFormat.printUntil( articleList.postDate, 'month', true )}</span>
+
+
                 <span class="hit">${articleList.hitCount}</span>
             </div>
       </li>`
@@ -141,10 +160,16 @@ module.exports = {
 			template: ( _v ) => `
 			<div class="board-nav">
 	      ${ ( _v._prev && _v._prev.articleId ) ?
-	        `<p class="prev"><span>${Config.L10N.prev_article}</span><a href="${Config.viewPage}?articleId=${_v._prev.articleId}">${_v._prev.title}</a></p>`: ''}
+	        `<p class="prev">
+            <span>${Config.L10N.prev_article}</span>
+            <a href="${Config.viewPage}?articleId=${_v._prev.articleId}">${_v._prev.title}</a>
+          </p>`: ''}
 
 	      ${ ( _v._next && _v._next.articleId ) ?
-	        `<p class="next"><span>${Config.L10N.next_article}</span><a href="${Config.viewPage}?articleId=${_v._next.articleId}">${_v._next.title}</a></p>`: ''}
+	        `<p class="next">
+            <span>${Config.L10N.next_article}</span>
+            <a href="${Config.viewPage}?articleId=${_v._next.articleId}">${_v._next.title}</a>
+          </p>`: ''}
 	    </div>`
 		});
   },
@@ -158,17 +183,17 @@ module.exports = {
 			data: _data.pageNavigation,
 			template: ( _v ) => `
 				<div class="comment-header">
-					<h3 class="comment-title">댓글<span>${_v.totalCount}</span></h3>
+					<h3 class="comment-title">${Config.L10N.comment}<span>${( _v && _v.totalCount )? _v.totalCount: 0}</span></h3>
 					<button class="co-btn co-btn-reload"><i class="fe-icon-reload"></i></button>
 				</div>
 			`
 		});
 	},
 
-	commentWrite: ( content ) => {
+	commentWrite: ( content, placeHolder = '' ) => {
     return `<div class="comment-form">
 				<div class="comment-form-textarea">
-					<textarea class="content ${content}" name="content" placeholder="${Config.L10N.comment_placeholder_login}" style="height:40px;"></textarea>
+					<textarea class="content ${content}" name="content" placeholder="${placeHolder || Config.L10N.comment_placeholder_login}" style="height:40px;"></textarea>
 					</div>
 			</div>`;
   },
@@ -181,23 +206,45 @@ module.exports = {
 				</div>`;
 	},
 
-	commentList: ( _data ) => {
+	commentList: ( _data, timeMsg = '' ) => {
 		return Template.iterate({
 			data: _data.commentList,
 			template: ( _v ) => `
 				<div class="${( _v.depth == 1 )?
-					'comment-article-reply':
-					( _v.statusCode == 'DELETE_USER' )? 'comment-article-delete': 'comment-article'}" data-commentid="${_v.commentId}">
+  					'comment-article-reply':
+  					( _v.statusCode == 'DELETE_USER' )?
+              'comment-article-delete':
+              'comment-article'
+          }"
+          data-commentid="${_v.commentId}">
 					<div class="comment-info">
 						<i class="fe-icon-reply"></i>
-						<span class="thumb"><img src="http://dn.sfile.plaync.com/data/${_v.writer.loginUser.uid}/profile?type=small" alt=""></span>
+						<span class="thumb">
+              <img src="http://${Util.net( '.' )}dn.sfile.plaync.com/data/${_v.writer.loginUser.uid}/profile?type=medium" alt="">
+            </span>
+
 						<!--span class="best">BEST</span-->
-						<span class="writer">${_v.writer.loginUser.name}</span>
-						<span class="date">${dateFormat.print( dateFormat.toGMTDate( _v.updateDate ) )}</span>
-						${ (_v.writer.loginUser.uid == Config.guid )? `<button class="co-btn btn-delete" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">삭제</button>`: ``}
-						${ (_v.writer.loginUser.uid != Config.guid )? `<button class="co-btn btn-declare" data-commentuser="${_v.writer.loginUser.name}" data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">신고</button>`: ``}
+
+            <span class="writer">${_v.writer.loginUser.name}</span>
+
+            ${ ( _v.postDate.indexOf( 'T' ) == -1 )?
+              `<span class="date">${ dateFormat.printUntil(  _v.postDate, 'month', true ) }</span>`:
+							`<span class="date">${ dateFormat.print( dateFormat.toGMTDate( _v.postDate ) )}</span>`
+            }
+
+						${ (_v.writer.loginUser.uid == Config.guid )?
+              `<button class="co-btn btn-delete" data-commentuser="${_v.writer.loginUser.name}"
+                data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">
+                  ${Config.L10N.more_delete}</button>`: ``}
+						${ (_v.writer.loginUser.uid != Config.guid )?
+              `<button class="co-btn btn-declare" data-commentuser="${_v.writer.loginUser.name}"
+                data-commentid="${_v.commentId}" data-uid="${_v.writer.loginUser.uid}">
+                  ${Config.L10N.more_report}</button>`: ``}
 					</div>
-					<div class="comment-contents">${ ( _v.statusCode == 'DELETE_USER' )? `${Config.L10N.comment_list_delete}`:  _v.contents }</div>
+					<div class="comment-contents">
+            ${ ( _v.statusCode == 'DELETE_USER' )?
+              `${Config.L10N.comment_list_delete}`:  _v.contents }
+          </div>
 					<div class="comment-utils">
 						<button data-commentid="${_v.commentId}" class="co-btn co-btn-like">
 							<i class="fe-icon-like"></i>
@@ -222,43 +269,53 @@ module.exports = {
       data: _data,
       template: ( _v, _writer = _data.article.writer ) => `
         <div class="view-signature">
-  				<div class="thumb"><img src="http://dn.sfile.plaync.com/data/${_writer.loginUser.uid}/profile?type=small" alt=""></div>
+  				<div class="thumb"><img src="http://${Util.net( '.' )}dn.sfile.plaync.com/data/${_writer.loginUser.uid}/profile?type=medium" alt=""></div>
 
   				<div class="writer">${_writer.loginUser.name}</div>
 
-  				<!--div class="info">
-  					<span class="jon">${_writer.gameUser.gameCharacterName}</span>
-            <span class="servername"></span>
-            <span class="level"></span>
-            <span class="clan"></span>
-  				</div-->
+          ${( _writer.gameUser.gameCharacterName )?
+  				`<div class="info">
+  					${ (_writer.gameUser.gameCharacterName )? `<span class="jon">${_writer.gameUser.gameCharacterName}</span>`: ``}
+            ${ (_writer.gameUser.gameServerName )? `<span class="servername">${_writer.gameUser.gameServerName}</span>`: ``}
+            <!--span class="level"></span-->
+            ${ ( _writer.gameUser.gameGroupId )? `<span class="clan">${_writer.gameUser.gameGroupId}</span>`: ``}
+  				</div>`: ``}
 			  </div>`
     });
   },
 
   view: ( _data, _template, isNotice ) => {
+
+    if( !Config.isLike )
+      isNotice = true;
+
 		return Template.render({
 			data: _data,
 			template: ( _v, _article = _v.article ) => `
 				<section class="board-view">
-					<div class="view-header">
+					<div class="view-header" style="${ ( Config.isHideViewInfo )? `display:none;`: ``}">
 						<h2 class="view-title">${_article.title}</h2>
 
 						<div class="view-info">
-              <span class="writer">${( _article.writer.adminUser && _article.writer.emoticonUrl)?
-                `<img src="${_article.writer.emoticonUrl}" alt=""/>`: _article.writer.loginUser.name}</span>
-							<span class="date">${dateFormat.print( dateFormat.toGMTDate( _article.updateDate ) )}</span>
-							<span class="hit">조회<em>${_article.hitCount}</em></span>
-							<span class="comment">댓글<em>${_article.commentCount}</em></span>
+              <span class="writer">
+              ${( _article.writer.adminUser && _article.writer.emoticonUrl)?
+                `<img src="${_article.writer.emoticonUrl}" alt=""/>`: _article.writer.loginUser.name}
+              </span>
+
+              <span class="date">${ dateFormat.printFull( _article.postDate ) }</span>
+
+							<span class="hit">${Config.L10N.hit}<em>${_article.hitCount}</em></span>
+
+              <span class="comment">${Config.L10N.comment}<em>${_article.commentCount}</em></span>
 
               ${( Config.isShowViewUtil )?
 							`<div class="ncCommunityMoreButton more">
 								<a href="#viewMoreList" class="co-btn co-btn-more"><i class="fe-icon-more"></i></a>
 								<ul id="viewMoreList" class="more-list">
-									<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>
+									${( Config.guid == _article.writer.loginUser.uid )? ``: `<li class="more-items"><button class="co-btn co-btn-bookmark">${Config.L10N.more_bookmark}</button></li>`}
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-modify">${Config.L10N.more_modify}</button></li>`}
 									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-delete">${Config.L10N.more_delete}</button></li>`}
-									${( Config.isAdmin )? ``: `<li class="more-items"><button class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>`}
+									${( Config.isAdmin || ( Config.guid == _article.writer.loginUser.uid ) )? ``: `<li class="more-items"><button class="co-btn co-btn-report">${Config.L10N.more_report}</button></li>`}
 								</ul>
 							</div>`: ``}
 						</div>
@@ -282,7 +339,9 @@ module.exports = {
 	},
 
 	vote: ( data, goodCount ) => {
-		return `<div><span>${Config.L10N.recommend}</span><button id="voteButton">${Config.L10N.recommend}</button>
+		return `<div>
+        <span>${Config.L10N.recommend}</span>
+        <button id="voteButton">${Config.L10N.recommend}</button>
 				<span>${( data && data.voteType == 'FOR' )? `${Config.L10N.recommend}` : ''}</span>
 				<span id="goodCount">${( goodCount && goodCount >= 0 )? `${goodCount}`: 0 }</span>
 			</div>`;

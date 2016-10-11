@@ -11,6 +11,7 @@ class YoutubeToolbar extends Toolbar{
 	constructor( $node, options = () => {} ){
 		super();
 		this.$node = $node;
+		this._id = 'rwdEditor_youtube_url';
 		this.insert = options.insert;
 		this.$tmp = jQuery( this.template() );
 		$node.append( this.$tmp );
@@ -45,19 +46,24 @@ class YoutubeToolbar extends Toolbar{
 
 	addEvent(){
 		jQuery( '#rwdEditor_youtube_button' ).on( 'click', ( evt ) => {
-			let url = jQuery( '#rwdEditor_youtube_url' ).val();
+			let url = jQuery( `#${this._id}` ).val();
 			this.insert( url );
 			this.hide();
+			this.clear();
 		});
 
 		jQuery( '.fe-btn-close' ).on( 'click', ( evt ) => {
 			this.hide();
+			this.clear();
 		});
 
 		jQuery( '.fe-btn-reset' ).on( 'click', ( evt ) => {
-			jQuery( '#rwdEditor_youtube_url' ).val( '' );
+			this.clear();
 		});
+	}
 
+	clear(){
+		jQuery( `#${this._id}` ).val( '' );
 	}
 
 	show(){

@@ -22,7 +22,7 @@ class CommentReply{
   }
 	setUI(){
 		let id = 'contentReply';
-		this.$write = jQuery( Template.commentWrite( id ) );
+		this.$write = jQuery( Template.commentWrite( id, Config.L10N.comment_reply_placeholder_login ) );
 
 		jQuery( 'body' ).on( 'focus', `#${this._id} .${id}` , ( evt ) => {
 			if( !Config.guid ){
@@ -61,6 +61,7 @@ class CommentReply{
 							commentList: [{
 								depth: 1,
 								commentId: data.number || '',
+								postDate: data.generatedDate || '',
 								updateDate: data.generatedDate || '',
 								contents: _val || '',
 								goodCount: 0,
@@ -68,13 +69,13 @@ class CommentReply{
 								writer: {
 									loginUser: {
 										uid: Config.guid || '',
-										name: Config.nickname || ''
+										name: Config.nickName || ''
 									}
 								}
 							}]
 						};
 
-						let _comment = Template.commentList( item );
+						let _comment = Template.commentList( item, Config.L10N.a_few_seconds_ago );
 						let _$article = jQuery( `#${this._id} .comment-article[data-commentid=${this.commentId}]` );
 						let _$articleComments = _$article.nextAll( '.comment-article:first, .comment-article-delete:first' ).first();
 
@@ -100,6 +101,8 @@ class CommentReply{
 			this.currTarget = _$this.parent().parent();
 			this.commentId = _$this.attr( 'data-commentid' );
 			this.currTarget.append( this.$write.show() );
+
+			this.$write.find( 'textarea' ).val( '' );
 		});
 
 		//return jquery Node

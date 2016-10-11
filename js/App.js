@@ -1,6 +1,7 @@
 import View from './board/View.js';
 import Write from './board/Write.js';
 import Comment from './board/Comment.js';
+import CommentChat from './board/CommentChat.js';
 
 import MyBookmark from './board/my/MyBookmark.js';
 import MyComment from './board/my/MyComment.js';
@@ -23,7 +24,9 @@ import ListFactory from './board/ListFactory';
       Comment: Comment,
       MyArticle: MyArticle,
       MyComment: MyComment,
-      MyBookmark: MyBookmark
+      MyBookmark: MyBookmark,
+      CommentChat: CommentChat
+
     };
 
   // if( !window.ui.RWDEditor.uploadImageSuccess )

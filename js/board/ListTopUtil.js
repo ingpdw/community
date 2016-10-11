@@ -21,7 +21,22 @@ class ListTopUtil{
 		this.onViewMode = new Observer;
 		this.onWrite = new Observer;
 
+		this.viewMode =  Util.getParams().viewMode || 'list';
+
+		( this.viewMode == 'list' )?
+			this.showCardButton():
+			this.showListButton();
   }
+
+	showCardButton(){
+		this.$node.find( '.btn-list' ).hide();
+		this.$node.find( '.btn-cards' ).show();
+	}
+
+	showListButton(){
+		this.$node.find( '.btn-list' ).show();
+		this.$node.find( '.btn-cards' ).hide();
+	}
 
 	setUI() {
 		this.$node.append( this._$node );

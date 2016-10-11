@@ -39,7 +39,7 @@ class List{
 		Config.isListShare = ( options && options.isListShare )?
 			options.isListShare: false;
 
-		this.viewMode =  Util.getParams().viewMode|| 'list'; //[ list | card ]
+		this.viewMode =  Util.getParams().viewMode || 'list'; //[ list | card ]
 
 		//menu Module
 		let listTopUtil = this.listTopUtil = new ListTopUtil( this.$node );
@@ -94,6 +94,7 @@ class List{
 			listCategory.onChange.add( ( data ) => {
 				let pInfo = this.paramInfo;
 				pInfo.setParam( [ 'categoryId', data ] );
+				pInfo.setParam( [ 'page', 1 ] );
 				location.href = Config.listPage + '?' + pInfo.getParam();
 			});
 			listCategory.onInit.add( ( categoryId ) => {
@@ -117,6 +118,7 @@ class List{
 		// pInfo.setParam( ['categoryId', _param.categoryId || '' ] );
 
 		let list = Util.get( Config.list( Config.board, page ), 'GET', {
+			size: Config.listSize,
 			page: page,
 			query: decodeURIComponent( pInfo.getParamByKey( 'query' ) ),
 			searchType: pInfo.getParamByKey( 'searchType' ),

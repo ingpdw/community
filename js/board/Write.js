@@ -208,11 +208,14 @@ class Write{
 			}
 
 			let data = {
-				articleId: this.articleId,
-				token_id: this.editor.getToken(),
+				token: this.editor.getToken(),
 				title: jQuery( '#title' ).val(),
 				contents: contents,
 				thumbnail: this.getThumbnail()
+			}
+
+			if( this.articleId ){
+				data.articleId = this.articleId;
 			}
 
 			if( this.dropdownLayer ){
@@ -221,7 +224,7 @@ class Write{
 
 			this.submit( data, ( data ) => {
 				this.isSubmit = true;
-				location.href = Config.listPage + '?' + this.paramInfo.getParam();
+				location.href = Config.listPage + '?' + this.paramInfo.getParamIgnore( 'articleId' );
 			});
 		});
 
@@ -249,7 +252,7 @@ class Write{
 			<div class="board-write-category"></div>
 
 			<div class="board-write-title">
-				<input type="text" name="title" id="title" placeholder="${Config.L10N.title}" />
+				<input type="text" name="title" id="title" maxlength="50" placeholder="${Config.L10N.title}" />
 			</div>
 
 			<div id="froala-editor"></div>

@@ -21,7 +21,7 @@ class Search{
 
   setCategoryUI(){
 		let tmp = [], searchTypes = [
-			{categoryId: 'content', categoryName: Config.L10N.search_searchtype_content},
+			{categoryId: 'contents', categoryName: Config.L10N.search_searchtype_content},
 			{categoryId: 'title', categoryName: Config.L10N.search_searchtype_title},
 			{categoryId: 'writer', categoryName: Config.L10N.search_searchtype_writer}
 		];
@@ -47,6 +47,7 @@ class Search{
 			if( query && data )
 				this.callback && this.callback( query, data );
 		});
+		this.dropdownLayer.setValue( tmp[ 0 ].key );
 	}
 
 	getSearchType() {
@@ -98,7 +99,7 @@ class Search{
 	}
 	templateSearchBox(){
 		return `<div class="ui-input-box ui-input-box-search">
-			<input type="text" id="${this._id}" class="input-board-search" name="query" value="">
+			<input type="text" id="${this._id}" class="input-board-search" name="query" value="" placeholder="${Config.L10N.search_place_holder}">
 			<button class="co-btn co-btn-reset"><i class="fe-icon-close_circle"></i></button>
 			</div>`;
 		}

@@ -47,12 +47,12 @@ class ListCategory{
 			if( data ) this.onChange.emit( data );
 		});
 
-		if( this.value ) this.setValue( this.value );
-
 		if( this.isSetDefault ){
 			this.setValue( tmp[ 0 ].key );
 			this.onInit.emit( tmp[ 0 ].key );
 		}
+
+		if( this.value ) this.setValue( this.value );
 
 
 	}

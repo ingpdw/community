@@ -73,7 +73,11 @@ class CommentReport {
 			this.writer = _$this.attr( 'data-commentuser' ) || '';
 			this.commentId = _$this.attr( 'data-commentid' ) || '';
 
-			this.show();
+			if( Config.isApp ){
+				//app
+			}else{
+				this.show();
+			}
 		});
 
 		//닫기 버튼

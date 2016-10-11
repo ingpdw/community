@@ -12,7 +12,7 @@ class CommentWrite{
 	constructor( $parent ){
 		this.$parent = $parent;
 		this._id = this.$parent.attr( 'id' );
-		this.articleId = Util.getParams().articleId;
+		this.articleId = window.articleId || Util.getParams().articleId;
 		this.id = 'contentWrite';
 
 		this.onWrite = new Observer;
@@ -20,7 +20,7 @@ class CommentWrite{
 	setUI(){
 		let write = Template.commentWrite( this.id );
 		jQuery( 'body' ).on( 'keypress', `#${this._id} .${this.id}` , ( evt ) => {
-			var key = evt.keyCode;
+			let key = evt.keyCode;
 			if( key == 13 ){
 				evt.preventDefault();
 				let _$this = jQuery( `#${this._id} .${this.id}` );

@@ -25,7 +25,6 @@ class Editor{
 
 		fr.DefineIcon('insertImage', {template: 'insertImage'});
 	    fr.RegisterCommand('insertImage', {
-	      title: 'Insert image',
 	      focus: true,
 	      undo: true,
 	      refreshAfterCallback: false,
@@ -37,7 +36,6 @@ class Editor{
 
 		fr.DefineIcon('youtube', {template: 'fe-icons'}); // insert Youtube
 	    fr.RegisterCommand('insertYoutube', {
-	      title: 'Insert youtube',
 	      focus: true,
 	      undo: true,
 	      refreshAfterCallback: false,
@@ -53,23 +51,26 @@ class Editor{
 		if( Config.options && Config.options.toolbar )
 			buttons = buttons.concat( Config.options.toolbar );
 
+
+
 		this.$node.froalaEditor({
+
+			// 'dragInline': false,
 			'key': Config.froalaKey,
 			'enter': jQuery.FroalaEditor.ENTER_DIV,
 			'pasteDeniedTags': Config.pasteDeniedTags,
 			'placeholderText': Config.L10N.alert_valid_contents,
-      'plainPaste': true,
+     	'plainPaste': true,
       'imagePaste': false,
 			'disableRightClick': true,
 			'charCounterCount': false,
-			// 'dragInline': false,
-			// 'pluginsEnabled': ['draggable'],
+			'toolbarSticky': true,
+			'shortcutsHint': false,
 			'toolbarButtons': buttons, //≥ 1200px
 			'toolbarButtonsMD': buttons, //≥ 992px
 			'toolbarButtonsSM': buttons, //≥ 768px
 			'toolbarButtonsXS': buttons //< 768px
-
-    });
+		});
 
 		this.submit = new Submit();
 	}
@@ -135,7 +136,7 @@ class Editor{
 	}
 	//@Test
 	scrollDown(){
-		jQuery( '#froala-editor .fr-wrapper' ).scrollTop( jQuery( '#froala-editor .fr-view' ).height() );
+		//jQuery( '#froala-editor .fr-wrapper' ).scrollTop( jQuery( '#froala-editor .fr-view' ).height() );
 	}
 };
 

@@ -47,6 +47,8 @@ class DropdownLayer{
 			let $selectedDropdown = jQuery( dropdownLayerList ).parent( dropdownLayer );
 			let $eventTartget = jQuery( e.target );
 
+			if( $eventTartget.hasClass('option') ) return;
+
 			this.textValue = $eventTartget.text();
 			this.listValue = $eventTartget.data( 'value' );
 

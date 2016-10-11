@@ -15,13 +15,23 @@ let Config = {
 
 	now: ( window.userData && window.userData.now )? window.userData.now: '',
 
-	nickName: ( window.userData && window.userData.nickName )? window.userData.nickName: '',
+	nickName: ( window.userData && window.userData.ncAccount
+	 	&& window.userData.ncAccount.name )? window.userData.ncAccount.name: '',
+
+	accountStateCase: ( window.userData && window.userData.accountState 
+		&& window.userData.accountState.case )? window.userData.accountState.case: '',
+
+	accountStateMsg: ( window.userData && window.userData.accountState
+		&& window.userData.accountState.msg )? window.userData.accountState.msg: '',
+
 
   //L20N, default: ko
   L10N: L10N[ jQuery('html').attr('lang') || 'ko' ],
 
   //게시판 종류, default: free
   board: 'free',
+
+	site: '',
 
   share: {},
 
@@ -50,6 +60,14 @@ let Config = {
 	isListShare: false,
 
   listSize: 12,
+
+	isShowTitle: true,
+
+	isHideViewInfo: false,
+
+	isApp: false,
+
+	isLike: true,
 
   loginPage: 'http://op.mlogin.plaync.com/login/signin',
 

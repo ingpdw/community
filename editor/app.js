@@ -25,6 +25,12 @@ import Template from 'js-template-string';
       Config.maxImages = ( options && options.maxImages )?
         options.maxImages: Config.maxImages;
 
+      //youtube template
+      youtubePlugin = new YoutubePlugin();
+
+      //image template
+      imagePlugin = new ImagePlugin();
+
       this.editor = editor = new Editor( $node );
 
       this.editor.onYoutube.add( () => {
@@ -32,12 +38,6 @@ import Template from 'js-template-string';
       }, this );
 
       this.editor.onImage.add( () => {}, this );
-
-      //youtube template
-      youtubePlugin = new YoutubePlugin();
-
-      //image template
-      imagePlugin = new ImagePlugin();
 
       //remove youtube template and image template.
       removePlugin = new RemovePlugin( Config.$parent, Config.removeButton, Config.removeNode );

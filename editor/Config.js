@@ -50,9 +50,9 @@ module.exports = {
 		return Template.render({
 			data: id,
 			template: ( id ) => `
-			<div class="fe-video" data-contents-type="video"
+			<div></div><div class="fe-video" data-contents-type="video"
 				data-contents-json="{&quot;vendor&quot;:&quot;youtube&quot;,&quot;video_id&quot;:&quot;${id}&quot;}" contenteditable="false">
-				<div class="fe-video-inner"><iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>${removeButtonTemplate}</div>
+				<div class="fe-video-inner"><iframe src="https://www.youtube.com/embed/${id}?wmode=opaque" frameborder="0" allowfullscreen></iframe>${removeButtonTemplate}</div>
 			</div><div></div>`
 		});
 	},
@@ -65,7 +65,7 @@ module.exports = {
 				height: _data.height || '0'
 			},
 			template: ( data ) => `
-			<div data-contents-type="image"
+			<div></div><div data-contents-type="image"
 				data-contents-json="{&quot;src&quot;:&quot;${ data.url }&quot;,
 					&quot;width&quot;:${data.width || 0},
 					&quot;height&quot;:${data.height || 0}}" contenteditable="false" class="fr-deletable">

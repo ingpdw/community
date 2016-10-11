@@ -13,6 +13,7 @@ class InfiniteScroll{
 		this.offset = 30;
 		this.callback = callback;
 		this.currScrollTop = this.offset;
+		this.$target = $target;
 	}
 
 	loadedEnd(){

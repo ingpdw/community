@@ -40,8 +40,8 @@ class NoticeList{
 			this.$_node.slick({
 				arrows: true,
 				dots: true,
-				prevArrow: '<button class="co-slick-arrow co-slick-prev"><i class="fe-icon-chevron_left"></i></button>',
-				nextArrow: '<button class="co-slick-arrow co-slick-next"><i class="fe-icon-chevron_right"></i></button>',
+				// prevArrow: '<button class="co-slick-arrow co-slick-prev"><i class="fe-icon-chevron_left"></i></button>',
+				// nextArrow: '<button class="co-slick-arrow co-slick-next"><i class="fe-icon-chevron_right"></i></button>',
 				// autoplay: true,
 				autoplaySpeed: 2500,
 			});

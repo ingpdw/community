@@ -34,7 +34,7 @@ class PageNavigation{
 					<ul class="pagination-list">
 						${ ( _v.prev )? `<li class="prev"><a href="${Config.listPage}?page=${_v.prev}${this.paramInfo.getParamIgnore( 'page' )}"><i class="fe-icon-chevron_left"></i></a></li>`: ``}
 						${_v.page}
-						${ (_v.next != _end )? `<li class="next"><a href="${Config.listPage}?page=${_v.next}${this.paramInfo.getParamIgnore( 'page' )}"><i class="fe-icon-chevron_right"></i></a></li>`: ``}
+						${ ( ( _end != _cur ) && ( _v.next != _cur ) )? `<li class="next"><a href="${Config.listPage}?page=${_v.next}${this.paramInfo.getParamIgnore( 'page' )}"><i class="fe-icon-chevron_right"></i></a></li>`: ``}
 					</ul>
 				</div>
 			`

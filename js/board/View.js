@@ -24,6 +24,8 @@ class View{
 
 		Config.board = ( options.board )? options.board: Config.board;
 
+		Config.view = ( options.viewAPIUrl )? options.viewAPIUrl: Config.view;
+
 		Config.isShare = ( options.isShare )? options.isShare: Config.isShare;
 
 		Config.share = ( options.share )? options.share: Config.share;
@@ -37,7 +39,16 @@ class View{
 		Config.isShowViewUtil = ( options.isShowViewUtil )?
 			options.isShowViewUtil: Config.isShowViewUtil;
 
+		Config.isHideViewInfo = ( options.isHideViewInfo )?
+			options.isHideViewInfo: Config.isHideViewInfo;
+
+		Config.isLike = ( options.isLike )?
+			options.isLike: Config.isLike;
+
 		let param = Util.getParams();
+
+		Config.guid = ( options.guid )?
+			options.guid: Config.guid;
 
 		this.articleId = param.articleId;
 
@@ -49,6 +60,8 @@ class View{
 		this.loading.setUI();
 		this.loading.show();
   }
+
+
 
   get(){
 		let viewUrl = '';
@@ -67,6 +80,9 @@ class View{
 
     let view = Util.get( viewUrl );
     view.then( ( data ) => {
+
+			data = Util.convertCamelCase( data );
+
 			this.guid = data.article.writer.loginUser.uid;
 			//이전 다음
 			this.prevNextArticle = new PrevNextArticle( this.$node );
@@ -97,7 +113,7 @@ class View{
 			//뷰어
 			this.Viewer = new Viewer();
 
-			if( Config.isShare && Config.share && nc && nc.uikit && nc.uikit.ShareV2 ){
+			if( Config.isShare && Config.share && window.nc && window.nc.uikit && window.nc.uikit.ShareV2 ){
 				new nc.uikit.ShareV2({
 				  $parent: jQuery( '#ncShare' ),
 				  appid: Config.share.appid || '',

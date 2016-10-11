@@ -2,20 +2,20 @@
  * Comment
  */
 
-import Config from '../Config.js';
-import Util from '../Util.js';
-import InfiniteScroll from '../InfiniteScroll.js';
-import Template from './Template.js';
+import Config from '../Config';
+import Util from '../Util';
+import InfiniteScroll from '../InfiniteScroll';
+import Template from './Template';
 import Loading from '../Loading';
-import CommentWrite from './CommentWrite.js';
-import CommentReply from './CommentReply.js';
-import CommentVote from './CommentVote.js';
-import CommentRemove from './CommentRemove.js';
-import CommentReload from './commentReload.js';
-import CommentHeader from './CommentHeader.js';
-import CommentListWrap from './CommentListWrap.js';
-import CommentReport from './CommentReport.js';
-import CommentMore from './CommentMore.js';
+import CommentWrite from './CommentWrite';
+import CommentReply from './CommentReply';
+import CommentVote from './CommentVote';
+import CommentRemove from './CommentRemove';
+import CommentReload from './commentReload';
+import CommentHeader from './CommentHeader';
+import CommentListWrap from './CommentListWrap';
+import CommentReport from './CommentReport';
+import CommentMore from './CommentMore';
 import Tmpl from 'js-template-string';
 
 class Comment{
@@ -24,7 +24,14 @@ class Comment{
 
 		this._id = this.$node.attr( 'id' );
 
-		Config.board = ( options.board )? options.board: Config.board;
+		Config.board = ( options.board )?
+			options.board: Config.board;
+
+		Config.commentVote = ( options.commentAPIUrl )?
+			options.commentAPIUrl: Config.commentVote;
+
+		Config.isApp = ( options.isApp )?
+			options.isApp: false;
 
 		jQuery.extend( true, Config, options );
 
@@ -55,15 +62,15 @@ class Comment{
 
 		//write comment
 		this.commentWrite = new CommentWrite( this.$node )
-		this.commentWrite.onWrite.add( ()=> {
+		this.commentWrite.onWrite.add( () => {
 			this.commentListWrap.empty();
-			this.reloadComment();
+			this.reloadComment( true );
 			this.commentWrite.clear();
 		}, this );
 
 		//comment Reply
 		this.commentReply = new CommentReply( this.$node );
-		this.commentReply.onReply.add( ()=> {
+		this.commentReply.onReply.add( () => {
 			this.commentHeader.setCommentCount( this.commentHeader.getCommentCount() + 1 );
 		}, this );
 
@@ -92,12 +99,9 @@ class Comment{
 		data.forEach( ( item ) =>  {
 			$( `#${this._id} button.co-btn-like[data-commentid=${item}]` ).addClass( 'is-active' );
 		});
-
-
-
 	}
 
-  reloadComment(){
+  reloadComment( isWrite = false ){
 		let articleId = Util.getParams().articleId;
 		let commentUrl = Tmpl.render({
 	      data: {
@@ -109,9 +113,21 @@ class Comment{
 
     let comment = Util.get( commentUrl );
     comment.then( ( data ) => {
+
+			data = Util.convertCamelCase( data );
+
 			let body = Template.commentList( data );
-			this.commentHeader.setCommentCount( data.pageNavigation.totalCount + data.pageNavigation.replyCount );
+			this.commentHeader.setCommentCount(
+				( data.pageNavigation )? data.pageNavigation.totalCount + data.pageNavigation.replyCount: 0 );
 			this.commentListWrap.appendList( body );
+
+			if( isWrite ){
+				//writed comments - a few seconds ago
+				let writingComment = this.$node.find( '.commentThread :first' );
+
+				writingComment.find( '.date' ).text( Config.L10N.a_few_seconds_ago );
+				writingComment.addClass( 'is-highlight' );
+			}
 
     }, ( data ) => {
 			if( data.status == 400 ){
@@ -145,8 +161,10 @@ class Comment{
     let comment = Util.get( commentUrl );
     comment.then( ( data ) => {
 
+			data = Util.convertCamelCase( data );
+
 			//set comment Header UI
-			let header =  this.commentHeader.setUI( data.pageNavigation );
+			let header =  this.commentHeader.setUI( data.pageNavigation || data.commentPagination );
 
 			//set comment write textare UI
 			let write = this.commentWrite.setUI();
@@ -169,7 +187,8 @@ class Comment{
 			this.myLikeComment( data.likeCommentIds );
 
 			//If it's the last page, remove more button
-			if( data.pageNavigation.endPage <= 1 ){
+			if( ( data.pageNavigation && data.pageNavigation.endPage <= 1 ) ||
+					( data.commentPagination && data.commentPagination.endPage <= 1 )	){
 				this.commentMore.remove();
 			}
 
@@ -181,9 +200,6 @@ class Comment{
 
 		})
   }
-
-
-
 };
 
 module.exports = Comment;
